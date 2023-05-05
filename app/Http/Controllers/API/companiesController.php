@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Companies;
+use App\Models\PaymentType;
 
 class companiesController extends Controller
 {
@@ -49,6 +50,20 @@ class companiesController extends Controller
                 "code" => 403,
                 'message' => 'These phonenumbers and IBAN numbers Already recorded'
             ]);
+        }
+    }
+    public function show()
+    {
+        try {
+            $payment_types = PaymentType::all();
+            $companies = Companies::all();
+            $data = array('companies' => $companies, 'payment_types' => $payment_types);
+            return response()->json([
+                "code" => 200,
+                "data" => $data,
+            ]);
+        } catch (\Throwable $th) {
+            throw $th;
         }
     }
 }
