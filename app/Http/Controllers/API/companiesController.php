@@ -66,4 +66,30 @@ class companiesController extends Controller
             throw $th;
         }
     }
+    public function update(Request $request)
+    {
+
+        try {
+            $temp['name'] = $request->input('name');
+            $temp['bank_name'] = $request->input('bankName');
+            $temp['bank_iban'] = $request->input('bankIban');
+            $temp['person_name'] = $request->input('personName');
+            $temp['phone_number'] = $request->input('phoneNumber');
+            $temp['payment_type_id'] = $request->input('paymentTypeID');
+            $temp['expiry_date'] = $request->input('ExpiryDate');
+            $temp['note'] = $request->input('note');
+
+            if (Companies::where('id',auth()->user()->id)->update($temp)) {
+                return response()->json([
+                    'message' => 'Firma Başarıyla Güncellendi!',
+                ]);
+            } else {
+                return response()->json([
+                    'message' => 'operation failed',
+                ]);
+            }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }
