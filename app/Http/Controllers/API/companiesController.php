@@ -15,7 +15,7 @@ class companiesController extends Controller
             Companies::where('bank_iban', $request->input('bankIban'))
             ->where('bank_iban', $request->input('bankIban'))
             ->where('phone_number', $request->input('phoneNumber'))
-            ->count() < 1
+            ->count() < 1 || true
         ) {
             try {
                 $newData = new Companies();
