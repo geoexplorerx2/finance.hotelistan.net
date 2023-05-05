@@ -2,7 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\API\companiesController;
+use App\Http\Controllers\API\AuthController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,8 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::POST('/login', 'API\AuthController@login');
-
+Route::POST('/login', [AuthController::class, 'login']);
+Route::POST('/companies/store', [companiesController::class, 'store']);
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
