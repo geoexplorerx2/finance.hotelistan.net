@@ -10,8 +10,7 @@ class companiesController extends Controller
 {
     public function store(Request $request)
     {
-        echo(auth()->user()->id);
-        dd('progress stopped');
+
         if (
             Companies::where('bank_iban', $request->input('bankIban'))
             ->where('bank_iban', $request->input('bankIban'))
@@ -28,6 +27,7 @@ class companiesController extends Controller
                 $newData->payment_type_id = $request->input('paymentTypeID');
                 $newData->expiry_date = $request->input('ExpiryDate');
                 $newData->note = $request->input('note');
+                $newData->user_id = auth()->user()->id;
                 $result = $newData->save();
 
                 if ($result) {
