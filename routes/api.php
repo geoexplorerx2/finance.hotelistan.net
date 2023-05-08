@@ -20,6 +20,7 @@ Route::POST('/login', [AuthController::class, 'login']);
 Route::GET('/companies/show', [companiesController::class, 'show']);
 Route::POST('/companies/store', [companiesController::class, 'store']);
 Route::POST('/companies/update', [companiesController::class, 'update']);
+Route::GET('/companies/destroy/{id}', [companiesController::class, 'destroy']);
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

@@ -79,7 +79,7 @@ class companiesController extends Controller
             $temp['expiry_date'] = $request->input('ExpiryDate');
             $temp['note'] = $request->input('note');
 
-            if (Companies::where('id',auth()->user()->id)->update($temp)) {
+            if (Companies::where('id', auth()->user()->id)->update($temp)) {
                 return response()->json([
                     'message' => 'Firma Başarıyla Güncellendi!',
                 ]);
@@ -90,6 +90,27 @@ class companiesController extends Controller
             }
         } catch (\Throwable $th) {
             throw $th;
+        }
+    }
+    public function destroy($id)
+    {
+        if (Companies::where('id', $id)->count() > 0) {
+            if (Companies::find($id)->delete()) {
+                return response()->json([
+                    'code' => 200,
+                    'message' => 'record deleted successfully!',
+                ]);
+            } else {
+                return response()->json([
+                    'code' => 400,
+                    'message' => 'Operation Failes!',
+                ]);
+            }
+        } else {
+            return response()->json([
+                'code' => 400,
+                'message' => 'There is no record for this ID!',
+            ]);
         }
     }
 }
