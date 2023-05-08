@@ -74,9 +74,13 @@ class paymenttypesapiController extends Controller
             $temp['note'] = $request->input('note');
 
             if (PaymentType::where('id', '=', $id)->update($temp)) {
-                return redirect('/definitions/paymenttypes')->with('message', 'Ödeme Türü Başarıyla Güncellendi!');
+                return response()->json([
+                    'message' => 'Ödeme Türü Başarıyla Güncellendi!',
+                ]);
             } else {
-                return back()->withInput($request->input());
+                return response()->json([
+                    'message' => 'Operation Failed',
+                ]);
             }
         } catch (\Throwable $th) {
             throw $th;

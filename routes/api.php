@@ -27,7 +27,7 @@ Route::GET('/paymenttypes', [paymenttypesapiController::class, 'index']);
 Route::GET('/paymenttypes/edit/{id}', [paymenttypesapiController::class, 'edit']);
 Route::GET('/paymenttypes/destroy/{id}', [paymenttypesapiController::class, 'destroy']);
 Route::POST('/paymenttypes/store', [paymenttypesapiController::class, 'store']);
-Route::POST('/paymenttypes/update/{id}', 'PaymentTypeController@update');
+Route::POST('/paymenttypes/update/{id}', [paymenttypesapiController::class, 'update']);
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
