@@ -7,7 +7,7 @@ use App\Http\Controllers\API\companiesController;
 use App\Http\Controllers\API\paymenttypesapiController;
 use App\Http\Controllers\API\paymentrequestcategoryapiController;
 use App\Http\Controllers\API\chequestatusapiController;
-
+use App\Http\Controllers\API\ChequeapiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +44,12 @@ Route::GET('/chequestatus/edit/{id}', [chequestatusapiController::class, 'edit']
 Route::GET('/chequestatus/destroy/{id}', [chequestatusapiController::class, 'destroy']);
 Route::POST('/chequestatus/store', [chequestatusapiController::class, 'store']);
 Route::POST('/chequestatus/update/{id}', [chequestatusapiController::class, 'update']);
+//Cheque
+Route::GET('/cheques', [ChequeapiController::class, 'index']);
+Route::GET('/cheques/edit/{id}', [ChequeapiController::class, 'edit']);
+Route::GET('/cheques/destroy/{id}', [ChequeapiController::class, 'destroy']);
+Route::POST('/cheques/update/{id}', [ChequeapiController::class, 'update']);
+Route::POST('/cheques/store', [ChequeapiController::class, 'store']);
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
