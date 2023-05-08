@@ -18,15 +18,15 @@ class CompanyController extends Controller
         try {
             $payment_types = PaymentType::all();
             $companies = Companies::all();
-            $data = array('companies' => $companies,'payment_types' => $payment_types);
+            $data = array('companies' => $companies, 'payment_types' => $payment_types);
             return view('admin.companies.company_list')->with($data);
-        }
-        catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             throw $th;
         }
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         try {
             $newData = new Companies();
             $newData->name = $request->input('name');
@@ -42,22 +42,20 @@ class CompanyController extends Controller
 
             if ($result) {
                 return redirect()->route('companies.index')->with('message', 'Firma Başarıyla Kaydedidi!');
-            }
-            else {
+            } else {
                 return back()->withInput($request->input());
             }
-        }
-        catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             throw $th;
         }
     }
 
     public function edit($id)
     {
-        $company = Companies::where('id','=',$id)->first();
+        $company = Companies::where('id', '=', $id)->first();
         $payment_types = PaymentType::all();
 
-        $data = array('company' => $company,'payment_types' => $payment_types);
+        $data = array('company' => $company, 'payment_types' => $payment_types);
 
         return view('admin.companies.edit_company')->with($data);
     }
@@ -78,17 +76,16 @@ class CompanyController extends Controller
 
             if (Companies::where('id', '=', $id)->update($temp)) {
                 return redirect()->route('companies.index')->with('message', 'Firma Başarıyla Güncellendi!');
-            }
-            else {
+            } else {
                 return back()->withInput($request->input());
             }
-        }
-        catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             throw $th;
         }
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         Companies::find($id)->delete();
         return redirect()->route('companies.index')->with('message', 'Firma Başarıyla Silindi!');
     }
