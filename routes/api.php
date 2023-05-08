@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\companiesController;
 use App\Http\Controllers\API\paymenttypesapiController;
+use App\Http\Controllers\API\paymentrequestcategoryapiController;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -28,6 +31,12 @@ Route::GET('/paymenttypes/edit/{id}', [paymenttypesapiController::class, 'edit']
 Route::GET('/paymenttypes/destroy/{id}', [paymenttypesapiController::class, 'destroy']);
 Route::POST('/paymenttypes/store', [paymenttypesapiController::class, 'store']);
 Route::POST('/paymenttypes/update/{id}', [paymenttypesapiController::class, 'update']);
+//Payment Request Category
+Route::GET('/paymentrequestcategory', [paymentrequestcategoryapiController::class, 'index']);
+Route::GET('/paymentrequestcategory/edit/{id}', [paymentrequestcategoryapiController::class, 'edit']);
+Route::GET('/paymentrequestcategory/destroy/{id}', [paymentrequestcategoryapiController::class, 'destroy']);
+Route::POST('/paymentrequestcategory/store', [paymentrequestcategoryapiController::class, 'store']);
+Route::POST('/paymentrequestcategory/update/{id}', [paymentrequestcategoryapiController::class, 'update']);
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
