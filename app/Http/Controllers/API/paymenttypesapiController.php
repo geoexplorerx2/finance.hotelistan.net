@@ -36,9 +36,15 @@ class paymenttypesapiController extends Controller
             $result = $newData->save();
 
             if ($result) {
-                return redirect()->route('paymenttypes.index')->with('message', 'Ödeme Türü Başarıyla Kaydedidi!');
+                return response()->json([
+                    'code' => 200,
+                    'message' => 'Ödeme Türü Başarıyla Kaydedidi!',
+                ]);
             } else {
-                return back()->withInput($request->input());
+                return response()->json([
+                    'code' => 402,
+                    'message' => 'Opration Failed',
+                ]);
             }
         } catch (\Throwable $th) {
             throw $th;
