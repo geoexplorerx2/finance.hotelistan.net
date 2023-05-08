@@ -6,6 +6,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\companiesController;
 use App\Http\Controllers\API\paymenttypesapiController;
 use App\Http\Controllers\API\paymentrequestcategoryapiController;
+use App\Http\Controllers\API\chequestatusapiController;
 
 
 /*
@@ -37,6 +38,12 @@ Route::GET('/paymentrequestcategory/edit/{id}', [paymentrequestcategoryapiContro
 Route::GET('/paymentrequestcategory/destroy/{id}', [paymentrequestcategoryapiController::class, 'destroy']);
 Route::POST('/paymentrequestcategory/store', [paymentrequestcategoryapiController::class, 'store']);
 Route::POST('/paymentrequestcategory/update/{id}', [paymentrequestcategoryapiController::class, 'update']);
+//Cheque Status
+Route::GET('/chequestatus', [chequestatusapiController::class, 'index']);
+Route::GET('/chequestatus/edit/{id}', [chequestatusapiController::class, 'edit']);
+Route::GET('/chequestatus/destroy/{id}', [chequestatusapiController::class, 'destroy']);
+Route::POST('/chequestatus/store', [chequestatusapiController::class, 'store']);
+Route::POST('/chequestatus/update/{id}', [chequestatusapiController::class, 'update']);
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
