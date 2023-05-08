@@ -9,6 +9,7 @@ use App\Http\Controllers\API\paymentrequestcategoryapiController;
 use App\Http\Controllers\API\chequestatusapiController;
 use App\Http\Controllers\API\ChequeapiController;
 use App\Http\Controllers\API\companytypesapi;
+use App\Http\Controllers\API\creditcardapiController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -56,6 +57,12 @@ Route::GET('/companytypes/destroy/{id}', [companytypesapi::class, 'destroy']);
 Route::GET('/companytypes/edit/{id}', [companytypesapi::class, 'edit']);
 Route::POST('/companytypes/store', [companytypesapi::class, 'store']);
 Route::POST('/companytypes/update/{id}', [companytypesapi::class, 'update']);
+//Credit Cards
+Route::GET('/creditcards', [creditcardapiController::class, 'index']);
+Route::GET('/creditcards/edit/{id}', [creditcardapiController::class, 'edit']);
+Route::GET('/creditcards/destroy/{id}', [creditcardapiController::class, 'destroy']);
+Route::POST('/creditcards/store', [creditcardapiController::class, 'store']);
+Route::POST('/creditcards/update/{id}', [creditcardapiController::class, 'update']);
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
