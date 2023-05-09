@@ -71,3 +71,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         dd('welcome');
     });
 });
+Route::GET('/alert', function () {
+    return response()->json([
+        'code' => 402,
+        'data' => 'unauthorized',
+    ]);
+});
