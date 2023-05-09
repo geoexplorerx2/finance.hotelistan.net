@@ -63,6 +63,11 @@ Route::GET('/creditcards/edit/{id}', [creditcardapiController::class, 'edit']);
 Route::GET('/creditcards/destroy/{id}', [creditcardapiController::class, 'destroy']);
 Route::POST('/creditcards/store', [creditcardapiController::class, 'store']);
 Route::POST('/creditcards/update/{id}', [creditcardapiController::class, 'update']);
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+// Route::group(['middleware' => ['auth:sanctum']], function () {
+//     Route::GET('/getToken', function () {
+//         dd('welcome');
+//     });
+// });
