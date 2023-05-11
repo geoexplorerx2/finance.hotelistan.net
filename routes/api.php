@@ -22,9 +22,17 @@ use App\Http\Controllers\API\creditcardapiController;
 */
 
 Route::POST('/login', [AuthController::class, 'login']);
-
+Route::POST('/forget-password', 'App\Http\Controllers\Auth\ForgotPasswordController@forgetPassword');
+Route::POST('/reset-password', 'App\Http\Controllers\Auth\ResetPasswordController@passwordReset');
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::GET('/logout', 'App\Http\Controllers\Api\AuthController@logout');
+    //Profile Update
+    Route::POST('/profile', 'App\Http\Controllers\Api\AuthController@profile');
+
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
     //Companies
     Route::GET('/companies/show', [companiesController::class, 'show']);
     Route::POST('/companies/store', [companiesController::class, 'store']);
@@ -66,6 +74,20 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::GET('/creditcards/destroy/{id}', [creditcardapiController::class, 'destroy']);
     Route::POST('/creditcards/store', [creditcardapiController::class, 'store']);
     Route::POST('/creditcards/update/{id}', [creditcardapiController::class, 'update']);
+
+    //Dashboard
+    Route::GET('/dashboard/counts', 'App\Http\Controllers\Api\DashboardController@counts');
+
+    // Payment Request
+    Route::GET('/payment-request', 'App\Http\Controllers\Api\PaymentRequestController@index');
+    Route::POST('/payment-request', 'App\Http\Controllers\Api\PaymentRequestController@store');
+    Route::PUT('/payment-request/{id}', 'App\Http\Controllers\Api\PaymentRequestController@update');
+    Route::DELETE('/payment-request/{id}', 'App\Http\Controllers\Api\PaymentRequestController@destroy');
+    
+    // Payment Request Files
+    Route::GET('/payment-request/files', 'App\Http\Controllers\Api\PaymentRequestFilesController@index');
+    Route::POST('/payment-request/files', 'App\Http\Controllers\Api\PaymentRequestFilesController@store');
+    Route::DELETE('/payment-request/files/{id}', 'App\Http\Controllers\Api\PaymentRequestFilesController@destroy');
 });
 Route::GET('/alert', function () {
     return response()->json([
