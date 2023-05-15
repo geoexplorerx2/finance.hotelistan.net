@@ -77,6 +77,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     //Dashboard
     Route::GET('/dashboard/counts', 'App\Http\Controllers\Api\DashboardController@counts');
+    Route::GET('/dashboard/users-report', 'App\Http\Controllers\Api\DashboardController@usersReport');
+    Route::GET('/dashboard/companies-report', 'App\Http\Controllers\Api\DashboardController@companiesReport');
 
     // Payment Request
     Route::GET('/payment-request', 'App\Http\Controllers\Api\PaymentRequestController@index');
