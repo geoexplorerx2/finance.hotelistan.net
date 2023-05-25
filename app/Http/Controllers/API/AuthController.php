@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
@@ -46,7 +47,7 @@ class AuthController extends Controller
                 'token' => $user->createToken("apitoken")->plainTextToken
             ];
 
-            return json_encode($response, 200);
+            return response()->json($response);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -57,10 +58,52 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()->tokens()->delete();
-
+        $request->user()->currentAccessToken()->delete();
+        Session::flush();
         return  response()->json([
+            'status' => true,
             'message' => 'token deleted successfully'
         ]);
+    }
+
+    public function profile(Request $request)
+    {
+        try {
+            $validators = [
+                'username' => 'required',
+                'email' => 'required|email',
+            ];
+
+            $temp['name'] = $request->input('username');
+            $temp['email'] = $request->input('email');
+
+            if ($request->has('password') && !empty($request->input('password'))) {
+                $validators['password'] = 'required|min:6|max:20|same:password_again';
+                $validators['password_again'] = 'required';
+                $temp['password'] = bcrypt($request->input('password'));
+            }
+
+            $validateRequest = Validator::make(
+                $request->all(),
+                $validators
+            );
+            if ($validateRequest->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validateRequest->errors()
+                ], 401);
+            }
+
+            /** @var User */
+            $updateSelectedData = $request->user();
+            $updateSelectedData->update($temp);
+            return response()->json([
+                'status' => true,
+                'message' => 'Profile updated successfully.',
+            ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }
