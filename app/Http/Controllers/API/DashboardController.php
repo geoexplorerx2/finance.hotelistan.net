@@ -29,7 +29,7 @@ class DashboardController extends Controller
 
     private function filterQuery(Request $request, Builder $query, $filterTable = "payment_requests")
     {
-        $type = $request->input("type") ?: "daily";
+        $type = $request->input("type") ?: null;
         switch ($type) {
             case 'daily':
                 $query->where("$filterTable.created_at", ">=", date("Y-m-d 00:00:00"))

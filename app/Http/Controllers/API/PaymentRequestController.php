@@ -16,17 +16,47 @@ class PaymentRequestController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(Request $request){
+    public function index(Request $request, $filter = null)
+    {
+
         /** @var \Illuminate\Database\Eloquent\Builder */
         $query = PaymentRequest::query();
         $query->orderBy('id', 'desc');
-        if($request->has('status')){
-            $query->where('payment_request_status_id', $request->input('status'));
+        if ($filter) {
+            $validate = Validator::make([
+                "filter" => $filter
+            ], [
+                "filter" => "in:requested,paid,not-paid,will-pay"
+            ]);
+            if ($validate->fails()) {
+                return $validate->errors();
+            }
+            switch ($filter) {
+                case "requested":
+                    $query->where('payment_request_status_id', 4);
+                    break;
+                case "paid":
+                    $query->where('payment_request_status_id', 2);
+                    break;
+                case "not-paid":
+                    $query->where('payment_request_status_id', 1);
+                    break;
+                case "will-pay":
+                    $query->where('payment_request_status_id', 3);
+                    break;
+            }
+        }
+        if($request->has("start_date")){
+            $query->whereDate('created_at', '>=', $request->get("start_date"));
+        }
+        if($request->has("end_date")){
+            $query->whereDate('created_at', '<=', $request->get("end_date"));
         }
         return $query->paginate(20);
     }
 
-    private function setRequestValues(PaymentRequest $paymentRequest, Request $request){
+    private function setRequestValues(PaymentRequest $paymentRequest, Request $request)
+    {
         $validate = Validator::make(
             $request->all(),
             [
@@ -57,7 +87,7 @@ class PaymentRequestController extends Controller
         try {
             $newData = new PaymentRequest();
             $valid = $this->setRequestValues($newData, $request);
-            if($valid instanceof MessageBag){
+            if ($valid instanceof MessageBag) {
                 response()->json([
                     'status' => false,
                     'message' => 'validation error',
@@ -70,26 +100,24 @@ class PaymentRequestController extends Controller
                     "request_id" => $newData->id,
                     "message" => "Ödeme Talebi başarıyla oluşturuldu."
                 ]);
-            }
-            else {
+            } else {
                 return response()->json([
                     "status" => false,
                     "message" => "Ödeme Talebi oluşturulurken bilinmeyen bir hata meydana geldi."
                 ], 401);
             }
-        }
-        catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             throw $th;
         }
     }
-    
+
     public function update(Request $request, $id)
     {
         try {
             /** @var PaymentRequest */
             $paymentRequest = PaymentRequest::findOrFail($id);
             $valid = $this->setRequestValues($paymentRequest, $request);
-            if($valid instanceof MessageBag){
+            if ($valid instanceof MessageBag) {
                 response()->json([
                     'status' => false,
                     'message' => 'validation error',
@@ -103,16 +131,14 @@ class PaymentRequestController extends Controller
                     "request_id" => $paymentRequest->id,
                     "message" => "Ödeme Talebi başarıyla güncellendi."
                 ]);
-            }
-            else {
+            } else {
                 return response()->json([
                     "status" => true,
                     "request_id" => $paymentRequest->id,
                     "message" => "Ödeme Talebi güncellenirken bilinmeyen bir hata meydana geldi."
                 ]);
             }
-        }
-        catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             throw $th;
         }
     }
