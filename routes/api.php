@@ -36,7 +36,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //Companies
     Route::GET('/companies/show', [companiesController::class, 'show']);
     Route::POST('/companies/store', [companiesController::class, 'store']);
-    Route::POST('/companies/update', [companiesController::class, 'update']);
+    Route::POST('/companies/update/{id}', [companiesController::class, 'update']);
     Route::GET('/companies/destroy/{id}', [companiesController::class, 'destroy']);
     //Payment Types
     Route::GET('/paymenttypes', [paymenttypesapiController::class, 'index']);
@@ -85,7 +85,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::POST('/payment-request', 'App\Http\Controllers\Api\PaymentRequestController@store');
     Route::PUT('/payment-request/{id}', 'App\Http\Controllers\Api\PaymentRequestController@update');
     Route::DELETE('/payment-request/{id}', 'App\Http\Controllers\Api\PaymentRequestController@destroy');
-    
+
     // Payment Request Files
     Route::GET('/payment-request/files', 'App\Http\Controllers\Api\PaymentRequestFilesController@index');
     Route::POST('/payment-request/files', 'App\Http\Controllers\Api\PaymentRequestFilesController@store');

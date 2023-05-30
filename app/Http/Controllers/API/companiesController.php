@@ -66,9 +66,8 @@ class companiesController extends Controller
             throw $th;
         }
     }
-    public function update(Request $request)
+    public function update(Request $request,$id)
     {
-
         try {
             $temp['name'] = $request->input('name');
             $temp['bank_name'] = $request->input('bankName');
@@ -79,7 +78,7 @@ class companiesController extends Controller
             $temp['expiry_date'] = $request->input('ExpiryDate');
             $temp['note'] = $request->input('note');
 
-            if (Companies::where('id', auth()->user()->id)->update($temp)) {
+            if (Companies::where('id', $id)->update($temp)) {
                 return response()->json([
                     'message' => 'Firma Başarıyla Güncellendi!',
                 ]);
