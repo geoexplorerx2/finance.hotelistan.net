@@ -61,8 +61,10 @@ class ForgotPasswordController extends Controller
             $mailData = [
                 "subject" => "Reset Password",
                 "to" => [
-                    "address" => $user->email,
-                    "name" => $user->name
+                    [
+                        "address" => $user->email,
+                        "name" => $user->name
+                    ]
                 ],
                 "body" => "You can use this code to reset you password: {$otpCode}"
             ];
