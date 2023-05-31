@@ -21,14 +21,14 @@ class FinanceCrmMail extends Mailable
     {
         $this->details = $details;
         $this->details["subject"] = config("app.name") . ' - ' . $this->details["subject"];
+        $this->details["to"] = $details["to"];
         if (config("app.env") == "local") {
-            $testMails = explode(";",  env("TEST_MAIL_RECEIVER", ""));
+            $testMails =  env("TEST_MAIL_RECEIVER", "") ? explode(";",  env("TEST_MAIL_RECEIVER", "")) : null;
             if ($testMails) {
                 $testTos = [];
                 foreach ($testMails  as $address) {
                     $name = is_array(@$this->mailData["to"][0]) ?
-                        @$this->mailData["to"][0]["name"] :
-                        /* Auth::user()->name */ "Test";
+                        @$this->mailData["to"][0]["name"] : auth()->user->name;
                     $testTos[] = [
                         "address" => $address,
                         "name" => $name
