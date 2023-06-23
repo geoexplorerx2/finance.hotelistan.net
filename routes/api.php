@@ -24,6 +24,7 @@ use App\Http\Controllers\API\creditcardapiController;
 Route::POST('/login', [AuthController::class, 'login']);
 Route::POST('/forget-password', 'App\Http\Controllers\Auth\ForgotPasswordController@forgetPassword');
 Route::POST('/reset-password', 'App\Http\Controllers\Auth\ResetPasswordController@passwordReset');
+Route::POST('/reset-password/verify-token', 'App\Http\Controllers\Auth\ResetPasswordController@verifyToken');
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::GET('/logout', 'App\Http\Controllers\Api\AuthController@logout');
