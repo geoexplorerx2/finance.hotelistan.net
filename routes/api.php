@@ -88,7 +88,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::GET('/payment-request/delete/{id}', 'App\Http\Controllers\API\PaymentRequestController@destroy');
 
     // Payment Request Files
-    Route::GET('/payment-request/files', 'App\Http\Controllers\API\PaymentRequestFilesController@index');
+    Route::GET('/payment-request/files/show', 'App\Http\Controllers\API\PaymentRequestFilesController@index');
     Route::POST('/payment-request/files/store', 'App\Http\Controllers\API\PaymentRequestFilesController@store');
     Route::GET('/payment-request/files/delete/{id}', 'App\Http\Controllers\API\PaymentRequestFilesController@destroy');
 
