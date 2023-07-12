@@ -27,9 +27,9 @@ Route::POST('/forget-password', 'App\Http\Controllers\Auth\ForgotPasswordControl
 Route::POST('/reset-password', 'App\Http\Controllers\Auth\ResetPasswordController@passwordReset');
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::GET('/logout', 'App\Http\Controllers\Api\AuthController@logout');
+    Route::GET('/logout', 'App\Http\Controllers\API\AuthController@logout');
     //Profile Update
-    Route::POST('/profile', 'App\Http\Controllers\Api\AuthController@profile');
+    Route::POST('/profile', 'App\Http\Controllers\API\AuthController@profile');
 
     Route::get('/user', function (Request $request) {
         return $request->user();
@@ -77,20 +77,20 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::POST('/creditcards/update/{id}', [creditcardapiController::class, 'update']);
 
     //Dashboard
-    Route::GET('/dashboard/counts', 'App\Http\Controllers\Api\DashboardController@counts');
-    Route::GET('/dashboard/users-report', 'App\Http\Controllers\Api\DashboardController@usersReport');
-    Route::GET('/dashboard/companies-report', 'App\Http\Controllers\Api\DashboardController@companiesReport');
+    Route::GET('/dashboard/counts', 'App\Http\Controllers\API\DashboardController@counts');
+    Route::GET('/dashboard/users-report', 'App\Http\Controllers\API\DashboardController@usersReport');
+    Route::GET('/dashboard/companies-report', 'App\Http\Controllers\API\DashboardController@companiesReport');
 
     // Payment Request
-    Route::GET('/payment-request/{filter?}', 'App\Http\Controllers\Api\PaymentRequestController@index');
-    Route::POST('/payment-request/store', 'App\Http\Controllers\Api\PaymentRequestController@store');
-    Route::PUT('/payment-request/update/{id}', 'App\Http\Controllers\Api\PaymentRequestController@update');
-    Route::DELETE('/payment-request/delete/{id}', 'App\Http\Controllers\Api\PaymentRequestController@destroy');
+    Route::GET('/payment-request/{filter?}', 'App\Http\Controllers\API\PaymentRequestController@index');
+    Route::POST('/payment-request/store', 'App\Http\Controllers\API\PaymentRequestController@store');
+    Route::PUT('/payment-request/update/{id}', 'App\Http\Controllers\API\PaymentRequestController@update');
+    Route::GET('/payment-request/delete/{id}', 'App\Http\Controllers\API\PaymentRequestController@destroy');
 
     // Payment Request Files
-    Route::GET('/payment-request/files', 'App\Http\Controllers\Api\PaymentRequestFilesController@index');
-    Route::POST('/payment-request/files', 'App\Http\Controllers\Api\PaymentRequestFilesController@store');
-    Route::DELETE('/payment-request/files/{id}', 'App\Http\Controllers\Api\PaymentRequestFilesController@destroy');
+    Route::GET('/payment-request/files', 'App\Http\Controllers\API\PaymentRequestFilesController@index');
+    Route::POST('/payment-request/files/store', 'App\Http\Controllers\API\PaymentRequestFilesController@store');
+    Route::GET('/payment-request/files/delete/{id}', 'App\Http\Controllers\API\PaymentRequestFilesController@destroy');
 
     // Currency List
     Route::get('/currencylist', [CurrencyController::class, 'show']);
