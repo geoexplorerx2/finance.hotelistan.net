@@ -10,6 +10,7 @@ use App\Http\Controllers\API\chequestatusapiController;
 use App\Http\Controllers\API\ChequeapiController;
 use App\Http\Controllers\API\companytypesapi;
 use App\Http\Controllers\API\creditcardapiController;
+use App\Http\Controllers\API\CurrencyController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -90,6 +91,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::GET('/payment-request/files', 'App\Http\Controllers\Api\PaymentRequestFilesController@index');
     Route::POST('/payment-request/files', 'App\Http\Controllers\Api\PaymentRequestFilesController@store');
     Route::DELETE('/payment-request/files/{id}', 'App\Http\Controllers\Api\PaymentRequestFilesController@destroy');
+
+    // Currency List
+    Route::get('/currencylist', [CurrencyController::class, 'show']);
 });
 Route::GET('/alert', function () {
     return response()->json([
