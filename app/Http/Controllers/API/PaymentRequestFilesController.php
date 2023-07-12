@@ -10,7 +10,9 @@ class PaymentRequestFilesController extends Controller{
     public function index()
     {
         return response()->json(
-            PaymentRequestFile::paginate(20)
+            [
+                'files_list' =>PaymentRequestFile::all()
+            ]
         );
     }
 
