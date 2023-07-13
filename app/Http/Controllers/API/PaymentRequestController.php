@@ -129,6 +129,12 @@ class PaymentRequestController extends Controller
                 'paginate' => $query->paginate(20),
             ]);
         }
+        if ($request->get("companyid") == null && $request->get("start_date") == null && $request->get("end_date") == null) {
+            return response()->json([
+                "response" => PaymentRequest::all(),
+                'paginate' => $query->paginate(20),
+            ]);
+        }
     }
 
     private function setRequestValues(PaymentRequest $paymentRequest, Request $request)
