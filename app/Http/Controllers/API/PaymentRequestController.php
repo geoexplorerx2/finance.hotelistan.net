@@ -54,6 +54,7 @@ class PaymentRequestController extends Controller
                     break;
             }
         }
+        $paginateData = (json_decode(json_encode($query->paginate(20)), true))['data'];
         if ($request->get("companyid") != null && $request->get("start_date") == null && $request->get("end_date") == null) {
             return response()->json([
                 "response" => PaymentRequest::where('paid_company_id', $request->get("companyid"))->get(),
