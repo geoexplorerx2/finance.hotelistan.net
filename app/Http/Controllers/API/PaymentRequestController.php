@@ -93,18 +93,21 @@ class PaymentRequestController extends Controller
             }
         }
 
-        return $response;
-        dd('progress stopped');
-        // add start data and end data and company id
+        return response()->json([
+            "response" => $response,
+            'paginate' => $query->paginate(20),
+        ]);
+        // dd('progress stopped');
+        // // add start data and end data and company id
 
-        if ($request->has("start_date")) {
+        // if ($request->has("start_date")) {
 
-            // $query->whereDate('created_at', '>=', $request->get("start_date"));
-        }
-        if ($request->has("end_date")) {
-            // $query->whereDate('created_at', '<=', $request->get("end_date"));
-        }
-        return $query->paginate(20);
+        //     // $query->whereDate('created_at', '>=', $request->get("start_date"));
+        // }
+        // if ($request->has("end_date")) {
+        //     // $query->whereDate('created_at', '<=', $request->get("end_date"));
+        // }
+        // return ;
     }
 
     private function setRequestValues(PaymentRequest $paymentRequest, Request $request)
