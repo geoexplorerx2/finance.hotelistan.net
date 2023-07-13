@@ -87,6 +87,48 @@ class PaymentRequestController extends Controller
                 'paginate' => $query->paginate(20),
             ]);
         }
+        if ($request->get("companyid") == null && $request->get("start_date") != null && $request->get("end_date") != null) {
+            $startDate = Carbon::parse($request->get("start_date"));
+            $endDate = Carbon::parse($request->get("end_date"));
+            foreach ($result as $item) {
+                $date = Carbon::parse($item->expiry_date);
+                if ($date->between($startDate, $endDate)) {
+                    array_push($response, $item);
+                }
+            }
+            return response()->json([
+                "response" => $response,
+                'paginate' => $query->paginate(20),
+            ]);
+        }
+        if ($request->get("companyid") == null && $request->get("start_date") == null && $request->get("end_date") != null) {
+            $startDate = Carbon::parse($request->get("start_date"));
+            $endDate = Carbon::parse($request->get("end_date"));
+            foreach ($result as $item) {
+                $date = Carbon::parse($item->expiry_date);
+                if ($date->lt($endDate) || $date->eq($endDate)) {
+                    array_push($response, $item);
+                }
+            }
+            return response()->json([
+                "response" => $response,
+                'paginate' => $query->paginate(20),
+            ]);
+        }
+        if ($request->get("companyid") == null && $request->get("start_date") != null && $request->get("end_date") == null) {
+            $startDate = Carbon::parse($request->get("start_date"));
+            $endDate = Carbon::parse($request->get("end_date"));
+            foreach ($result as $item) {
+                $date = Carbon::parse($item->expiry_date);
+                if ($date->gt($startDate) || $date->eq($startDate)) {
+                    array_push($response, $item);
+                }
+            }
+            return response()->json([
+                "response" => $response,
+                'paginate' => $query->paginate(20),
+            ]);
+        }
     }
 
     private function setRequestValues(PaymentRequest $paymentRequest, Request $request)
