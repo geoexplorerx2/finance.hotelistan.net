@@ -56,9 +56,15 @@ class PaymentRequestController extends Controller
         }
         $paginateData = (json_decode(json_encode($query->paginate(20)), true))['data'];
         if ($request->get("companyid") != null && $request->get("start_date") == null && $request->get("end_date") == null) {
+            foreach (PaymentRequest::where('paid_company_id', $request->get("companyid"))->get() as $item) {
+                foreach ($paginateData as $subitem) {
+                    if ($item->paid_company_id == $subitem['paid_company_id']) {
+                        array_push($response, $item);
+                    }
+                }
+            }
             return response()->json([
-                "response" => PaymentRequest::where('paid_company_id', $request->get("companyid"))->get(),
-                'paginate' => $query->paginate(20),
+                "response" => $response,
             ]);
         }
         if ($request->get("companyid") != null && $request->get("start_date") != null && $request->get("end_date") == null) {
