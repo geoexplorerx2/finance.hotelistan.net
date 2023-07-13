@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\PaymentRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
+use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rules\Unique;
 
 class PaymentRequestController extends Controller
 {
@@ -18,10 +21,19 @@ class PaymentRequestController extends Controller
 
     public function index(Request $request, $filter = null)
     {
-
         /** @var \Illuminate\Database\Eloquent\Builder */
         $query = PaymentRequest::query();
         $query->orderBy('id', 'desc');
+        $collect = PaymentRequest::all();
+        $result = array();
+        $response = array();
+        $Temp = array();
+        $Serialize = array();
+        foreach ($collect as $item) {
+            if ($item->expiry_date != null) {
+                array_push($result, $item);
+            }
+        }
         if ($filter) {
             $validate = Validator::make([
                 "filter" => $filter
@@ -46,13 +58,139 @@ class PaymentRequestController extends Controller
                     break;
             }
         }
-        if($request->has("start_date")){
-            $query->whereDate('created_at', '>=', $request->get("start_date"));
+        $paginateData = (json_decode(json_encode($query->paginate(20)), true))['data'];
+        if ($request->get("companyid") != null && $request->get("start_date") == null && $request->get("end_date") == null) {
+            foreach (PaymentRequest::where('paid_company_id', $request->get("companyid"))->get() as $item) {
+                foreach ($paginateData as $subitem) {
+                    if ($item->paid_company_id == $subitem['paid_company_id']) {
+                        array_push($Temp, $item);
+                    }
+                }
+            }
+            $response = [];
+            foreach (array_unique($Temp, SORT_REGULAR) as $item) {
+                array_push($response, $item);
+            }
+            return response()->json($response);
         }
-        if($request->has("end_date")){
-            $query->whereDate('created_at', '<=', $request->get("end_date"));
+        if ($request->get("companyid") != null && $request->get("start_date") != null && $request->get("end_date") == null) {
+            $startDate = Carbon::parse($request->get("start_date"));
+            foreach ($result as $item) {
+                $date = Carbon::parse($item->expiry_date);
+                if (($date->gt($startDate) || ($date->eq($startDate))) && $request->get("companyid") == $item->paid_company_id) {
+                    array_push($Temp, $item);
+                }
+            }
+            foreach ($Temp as $item) {
+                foreach ($paginateData as $subitem) {
+                    if ($item->paid_company_id == $subitem['paid_company_id']) {
+                        array_push($response, $item);
+                    }
+                }
+            }
+
+            foreach (array_unique($response, SORT_REGULAR) as $item) {
+                array_push($Serialize, $item);
+            }
+            return response()->json($Serialize);
         }
-        return $query->paginate(20);
+        if ($request->get("companyid") != null && $request->get("start_date") != null && $request->get("end_date") != null) {
+            $startDate = Carbon::parse($request->get("start_date"));
+            $endDate = Carbon::parse($request->get("end_date"));
+            foreach ($result as $item) {
+                $date = Carbon::parse($item->expiry_date);
+                if ($date->between($startDate, $endDate) && $request->get("companyid") == $item->paid_company_id) {
+                    array_push($Temp, $item);
+                }
+            }
+            foreach ($Temp as $item) {
+                foreach ($paginateData as $subitem) {
+                    if ($item->paid_company_id == $subitem['paid_company_id']) {
+                        array_push($response, $item);
+                    }
+                }
+            }
+            foreach (array_unique($response, SORT_REGULAR) as $item) {
+                array_push($Serialize, $item);
+            }
+            return response()->json($Serialize);
+        }
+        if ($request->get("companyid") == null && $request->get("start_date") != null && $request->get("end_date") != null) {
+            $startDate = Carbon::parse($request->get("start_date"));
+            $endDate = Carbon::parse($request->get("end_date"));
+            foreach ($result as $item) {
+                $date = Carbon::parse($item->expiry_date);
+                if ($date->between($startDate, $endDate)) {
+                    array_push($Temp, $item);
+                }
+            }
+            foreach ($Temp as $item) {
+                foreach ($paginateData as $subitem) {
+                    if ($item->paid_company_id == $subitem['paid_company_id']) {
+                        array_push($response, $item);
+                    }
+                }
+            }
+            foreach (array_unique($response, SORT_REGULAR) as $item) {
+                array_push($Serialize, $item);
+            }
+            return response()->json($Serialize);
+        }
+        if ($request->get("companyid") == null && $request->get("start_date") == null && $request->get("end_date") != null) {
+            $startDate = Carbon::parse($request->get("start_date"));
+            $endDate = Carbon::parse($request->get("end_date"));
+            foreach ($result as $item) {
+                $date = Carbon::parse($item->expiry_date);
+                if ($date->lt($endDate) || $date->eq($endDate)) {
+                    array_push($Temp, $item);
+                }
+            }
+            foreach ($Temp as $item) {
+                foreach ($paginateData as $subitem) {
+                    if ($item->paid_company_id == $subitem['paid_company_id']) {
+                        array_push($response, $item);
+                    }
+                }
+            }
+            foreach (array_unique($response, SORT_REGULAR) as $item) {
+                array_push($Serialize, $item);
+            }
+            return response()->json($Serialize);
+        }
+        if ($request->get("companyid") == null && $request->get("start_date") != null && $request->get("end_date") == null) {
+            $startDate = Carbon::parse($request->get("start_date"));
+            $endDate = Carbon::parse($request->get("end_date"));
+            foreach ($result as $item) {
+                $date = Carbon::parse($item->expiry_date);
+                if ($date->gt($startDate) || $date->eq($startDate)) {
+                    array_push($Temp, $item);
+                }
+            }
+            foreach ($Temp as $item) {
+                foreach ($paginateData as $subitem) {
+                    if ($item->paid_company_id == $subitem['paid_company_id']) {
+                        array_push($response, $item);
+                    }
+                }
+            }
+            foreach (array_unique($response, SORT_REGULAR) as $item) {
+                array_push($Serialize, $item);
+            }
+            return response()->json($Serialize);
+        }
+        if ($request->get("companyid") == null && $request->get("start_date") == null && $request->get("end_date") == null) {
+            foreach (PaymentRequest::all() as $item) {
+                foreach ($paginateData as $subitem) {
+                    if ($item->paid_company_id == $subitem['paid_company_id']) {
+                        array_push($response, $item);
+                    }
+                }
+            }
+            foreach (array_unique($response, SORT_REGULAR) as $item) {
+                array_push($Serialize, $item);
+            }
+            return response()->json($Serialize);
+        }
     }
 
     private function setRequestValues(PaymentRequest $paymentRequest, Request $request)
