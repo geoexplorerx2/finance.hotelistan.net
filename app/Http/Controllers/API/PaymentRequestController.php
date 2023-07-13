@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\PaymentRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rules\Unique;
 
 class PaymentRequestController extends Controller
 {
@@ -26,6 +28,7 @@ class PaymentRequestController extends Controller
         $result = array();
         $response = array();
         $Temp = array();
+        $Serialize = array();
         foreach ($collect as $item) {
             if ($item->expiry_date != null) {
                 array_push($result, $item);
@@ -60,13 +63,15 @@ class PaymentRequestController extends Controller
             foreach (PaymentRequest::where('paid_company_id', $request->get("companyid"))->get() as $item) {
                 foreach ($paginateData as $subitem) {
                     if ($item->paid_company_id == $subitem['paid_company_id']) {
-                        array_push($response, $item);
+                        array_push($Temp, $item);
                     }
                 }
             }
-            return response()->json([
-                "response" => $response,
-            ]);
+            $response = [];
+            foreach (array_unique($Temp, SORT_REGULAR) as $item) {
+                array_push($response, $item);
+            }
+            return response()->json($response);
         }
         if ($request->get("companyid") != null && $request->get("start_date") != null && $request->get("end_date") == null) {
             $startDate = Carbon::parse($request->get("start_date"));
@@ -83,9 +88,11 @@ class PaymentRequestController extends Controller
                     }
                 }
             }
-            return response()->json([
-                "response" => $response,
-            ]);
+
+            foreach (array_unique($response, SORT_REGULAR) as $item) {
+                array_push($Serialize, $item);
+            }
+            return response()->json($Serialize);
         }
         if ($request->get("companyid") != null && $request->get("start_date") != null && $request->get("end_date") != null) {
             $startDate = Carbon::parse($request->get("start_date"));
