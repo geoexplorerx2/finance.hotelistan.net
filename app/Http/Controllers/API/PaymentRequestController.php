@@ -54,60 +54,39 @@ class PaymentRequestController extends Controller
                     break;
             }
         }
-        // return PaymentRequest::all();
-        if ($request->get("companyid") != null) {
-            return PaymentRequest::where('pay_company_id', $request->get("companyid"))->get();
-        } else {
-            if ($request->get("start_date") != null && $request->get("end_date") != null) {
-
-                $startDate = Carbon::parse($request->get("start_date"));
-                $endDate = Carbon::parse($request->get("end_date"));
-                foreach ($result as $item) {
-                    $date = Carbon::parse($item->expiry_date);
-                    if ($date->between($startDate, $endDate)) {
-                        array_push($response, $item);
-                    }
-                }
-            }
-            if ($request->get("start_date") != null && $request->get("end_date") == null) {
-
-                $startDate = Carbon::parse($request->get("start_date"));
-                // $endDate = Carbon::parse($request->get("end_date"));
-                foreach ($result as $item) {
-                    $date = Carbon::parse($item->expiry_date);
-                    if ($date->gt($startDate)) {
-                        array_push($response, $item);
-                    }
-                }
-            }
-            if ($request->get("start_date") == null && $request->get("end_date") != null) {
-
-                // $startDate = Carbon::parse($request->get("start_date"));
-                $endDate = Carbon::parse($request->get("end_date"));
-                foreach ($result as $item) {
-                    $date = Carbon::parse($item->expiry_date);
-                    if ($date->lt($endDate)) {
-                        array_push($response, $item);
-                    }
-                }
-            }
+        if ($request->get("companyid") != null && $request->get("start_date") == null && $request->get("end_date") == null) {
+            return response()->json([
+                "response" => PaymentRequest::where('paid_company_id', $request->get("companyid"))->get(),
+                'paginate' => $query->paginate(20),
+            ]);
         }
-
-        return response()->json([
-            "response" => $response,
-            'paginate' => $query->paginate(20),
-        ]);
-        // dd('progress stopped');
-        // // add start data and end data and company id
-
-        // if ($request->has("start_date")) {
-
-        //     // $query->whereDate('created_at', '>=', $request->get("start_date"));
-        // }
-        // if ($request->has("end_date")) {
-        //     // $query->whereDate('created_at', '<=', $request->get("end_date"));
-        // }
-        // return ;
+        if ($request->get("companyid") != null && $request->get("start_date") != null && $request->get("end_date") == null) {
+            $startDate = Carbon::parse($request->get("start_date"));
+            foreach ($result as $item) {
+                $date = Carbon::parse($item->expiry_date);
+                if (($date->gt($startDate) || ($date->eq($startDate))) && $request->get("companyid") == $item->paid_company_id) {
+                    array_push($response, $item);
+                }
+            }
+            return response()->json([
+                "response" => $response,
+                'paginate' => $query->paginate(20),
+            ]);
+        }
+        if ($request->get("companyid") != null && $request->get("start_date") != null && $request->get("end_date") != null) {
+            $startDate = Carbon::parse($request->get("start_date"));
+            $endDate = Carbon::parse($request->get("end_date"));
+            foreach ($result as $item) {
+                $date = Carbon::parse($item->expiry_date);
+                if ($date->between($startDate, $endDate) && $request->get("companyid") == $item->paid_company_id) {
+                    array_push($response, $item);
+                }
+            }
+            return response()->json([
+                "response" => $response,
+                'paginate' => $query->paginate(20),
+            ]);
+        }
     }
 
     private function setRequestValues(PaymentRequest $paymentRequest, Request $request)
