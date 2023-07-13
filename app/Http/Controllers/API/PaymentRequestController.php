@@ -110,9 +110,10 @@ class PaymentRequestController extends Controller
                     }
                 }
             }
-            return response()->json([
-                "response" => $response,
-            ]);
+            foreach (array_unique($response, SORT_REGULAR) as $item) {
+                array_push($Serialize, $item);
+            }
+            return response()->json($Serialize);
         }
         if ($request->get("companyid") == null && $request->get("start_date") != null && $request->get("end_date") != null) {
             $startDate = Carbon::parse($request->get("start_date"));
