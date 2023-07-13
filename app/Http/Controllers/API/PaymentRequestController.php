@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
+use Illuminate\Support\Carbon;
 
 class PaymentRequestController extends Controller
 {
@@ -18,10 +19,17 @@ class PaymentRequestController extends Controller
 
     public function index(Request $request, $filter = null)
     {
-
         /** @var \Illuminate\Database\Eloquent\Builder */
         $query = PaymentRequest::query();
         $query->orderBy('id', 'desc');
+        $collect = PaymentRequest::all();
+        $result = array();
+        $response = array();
+        foreach ($collect as $item) {
+            if ($item->expiry_date != null) {
+                array_push($result, $item);
+            }
+        }
         if ($filter) {
             $validate = Validator::make([
                 "filter" => $filter
@@ -46,11 +54,33 @@ class PaymentRequestController extends Controller
                     break;
             }
         }
-        if($request->has("start_date")){
-            $query->whereDate('created_at', '>=', $request->get("start_date"));
+        // return PaymentRequest::all();
+        if ($request->get("companyid") != null) {
+            return PaymentRequest::where('pay_company_id', $request->get("companyid"))->get();
+        } else {
+            if ($request->get("start_date") != null && $request->get("end_date") != null) {
+
+                $startDate = Carbon::parse($request->get("start_date"));
+                $endDate = Carbon::parse($request->get("end_date"));
+                foreach ($result as $item) {
+                    $date = Carbon::parse($item->expiry_date);
+                    if ($date->between($startDate, $endDate)) {
+                        array_push($response, $item);
+                    }
+                }
+            }
         }
-        if($request->has("end_date")){
-            $query->whereDate('created_at', '<=', $request->get("end_date"));
+
+        return $response;
+        dd('progress stopped');
+        // add start data and end data and company id
+
+        if ($request->has("start_date")) {
+
+            // $query->whereDate('created_at', '>=', $request->get("start_date"));
+        }
+        if ($request->has("end_date")) {
+            // $query->whereDate('created_at', '<=', $request->get("end_date"));
         }
         return $query->paginate(20);
     }
