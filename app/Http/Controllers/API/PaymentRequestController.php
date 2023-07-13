@@ -65,7 +65,7 @@ class PaymentRequestController extends Controller
                 }
             }
             return response()->json([
-                "response" => array_unique($response),
+                "response" => $response,
             ]);
         }
         if ($request->get("companyid") != null && $request->get("start_date") != null && $request->get("end_date") == null) {
@@ -84,7 +84,7 @@ class PaymentRequestController extends Controller
                 }
             }
             return response()->json([
-                "response" => array_unique($response),
+                "response" => $response,
             ]);
         }
         if ($request->get("companyid") != null && $request->get("start_date") != null && $request->get("end_date") != null) {
@@ -104,7 +104,7 @@ class PaymentRequestController extends Controller
                 }
             }
             return response()->json([
-                "response" => array_unique($response),
+                "response" => $response,
             ]);
         }
         if ($request->get("companyid") == null && $request->get("start_date") != null && $request->get("end_date") != null) {
@@ -113,12 +113,18 @@ class PaymentRequestController extends Controller
             foreach ($result as $item) {
                 $date = Carbon::parse($item->expiry_date);
                 if ($date->between($startDate, $endDate)) {
-                    array_push($response, $item);
+                    array_push($Temp, $item);
+                }
+            }
+            foreach ($Temp as $item) {
+                foreach ($paginateData as $subitem) {
+                    if ($item->paid_company_id == $subitem['paid_company_id']) {
+                        array_push($response, $item);
+                    }
                 }
             }
             return response()->json([
                 "response" => $response,
-                'paginate' => $query->paginate(20),
             ]);
         }
         if ($request->get("companyid") == null && $request->get("start_date") == null && $request->get("end_date") != null) {
@@ -127,12 +133,18 @@ class PaymentRequestController extends Controller
             foreach ($result as $item) {
                 $date = Carbon::parse($item->expiry_date);
                 if ($date->lt($endDate) || $date->eq($endDate)) {
-                    array_push($response, $item);
+                    array_push($Temp, $item);
+                }
+            }
+            foreach ($Temp as $item) {
+                foreach ($paginateData as $subitem) {
+                    if ($item->paid_company_id == $subitem['paid_company_id']) {
+                        array_push($response, $item);
+                    }
                 }
             }
             return response()->json([
                 "response" => $response,
-                'paginate' => $query->paginate(20),
             ]);
         }
         if ($request->get("companyid") == null && $request->get("start_date") != null && $request->get("end_date") == null) {
@@ -141,18 +153,30 @@ class PaymentRequestController extends Controller
             foreach ($result as $item) {
                 $date = Carbon::parse($item->expiry_date);
                 if ($date->gt($startDate) || $date->eq($startDate)) {
-                    array_push($response, $item);
+                    array_push($Temp, $item);
+                }
+            }
+            foreach ($Temp as $item) {
+                foreach ($paginateData as $subitem) {
+                    if ($item->paid_company_id == $subitem['paid_company_id']) {
+                        array_push($response, $item);
+                    }
                 }
             }
             return response()->json([
                 "response" => $response,
-                'paginate' => $query->paginate(20),
             ]);
         }
         if ($request->get("companyid") == null && $request->get("start_date") == null && $request->get("end_date") == null) {
+            foreach (PaymentRequest::all() as $item) {
+                foreach ($paginateData as $subitem) {
+                    if ($item->paid_company_id == $subitem['paid_company_id']) {
+                        array_push($response, $item);
+                    }
+                }
+            }
             return response()->json([
-                "response" => PaymentRequest::all(),
-                'paginate' => $query->paginate(20),
+                "response" => $response,
             ]);
         }
     }
