@@ -69,6 +69,28 @@ class PaymentRequestController extends Controller
                     }
                 }
             }
+            if ($request->get("start_date") != null && $request->get("end_date") == null) {
+
+                $startDate = Carbon::parse($request->get("start_date"));
+                // $endDate = Carbon::parse($request->get("end_date"));
+                foreach ($result as $item) {
+                    $date = Carbon::parse($item->expiry_date);
+                    if ($date->gt($startDate)) {
+                        array_push($response, $item);
+                    }
+                }
+            }
+            if ($request->get("start_date") == null && $request->get("end_date") != null) {
+
+                // $startDate = Carbon::parse($request->get("start_date"));
+                $endDate = Carbon::parse($request->get("end_date"));
+                foreach ($result as $item) {
+                    $date = Carbon::parse($item->expiry_date);
+                    if ($date->lt($endDate)) {
+                        array_push($response, $item);
+                    }
+                }
+            }
         }
 
         return $response;
