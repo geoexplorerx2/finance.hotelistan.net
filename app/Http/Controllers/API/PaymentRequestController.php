@@ -25,6 +25,7 @@ class PaymentRequestController extends Controller
         $collect = PaymentRequest::all();
         $result = array();
         $response = array();
+        $Temp = array();
         foreach ($collect as $item) {
             if ($item->expiry_date != null) {
                 array_push($result, $item);
@@ -72,12 +73,18 @@ class PaymentRequestController extends Controller
             foreach ($result as $item) {
                 $date = Carbon::parse($item->expiry_date);
                 if (($date->gt($startDate) || ($date->eq($startDate))) && $request->get("companyid") == $item->paid_company_id) {
-                    array_push($response, $item);
+                    array_push($Temp, $item);
+                }
+            }
+            foreach ($Temp as $item) {
+                foreach ($paginateData as $subitem) {
+                    if ($item->paid_company_id == $subitem['paid_company_id']) {
+                        array_push($response, $item);
+                    }
                 }
             }
             return response()->json([
                 "response" => $response,
-                'paginate' => $query->paginate(20),
             ]);
         }
         if ($request->get("companyid") != null && $request->get("start_date") != null && $request->get("end_date") != null) {
