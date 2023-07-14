@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
-class CompanyTypesApi extends Controller
+class CompanyTypesApiController extends Controller
 {
     public function index()
     {
