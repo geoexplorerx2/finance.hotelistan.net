@@ -9,6 +9,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
+use App\Models\PaymentRequestStatus;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rules\Unique;
 
@@ -78,12 +79,14 @@ class PaymentRequestController extends Controller
         if (empty($paid_company_id) && empty($start_date) && empty($end_date)) {
             $result = PaymentRequest::paginate(20);
         }
-        // foreach((json_decode(json_encode($result), true))['data'] as $item){
-        //     // $id = PaymentRequest::find((json_decode(json_encode($item), true))["id"]);
-        //     // $id = (json_decode(json_encode($item), true))["payment_request_status_id"]
-        //     array_push($temp,json_encode('{"welcome":"1"}'));
-        // }
-        return response()->json($result);
+        foreach((json_decode(json_encode($result), true))['data'] as $item){
+            // PaymentRequestStatus::find((json_decode(json_encode($item), true))["payment_request_status_id"])->name
+            
+            // $id = PaymentRequestStatus::find((json_decode(json_encode($item), true))["payment_request_status_id"]);
+            // $id = (json_decode(json_encode($item), true))["payment_request_status_id"]
+            array_push($temp,1);
+        }
+        return response()->json($temp);
     }
 
     private function setRequestValues(PaymentRequest $paymentRequest, Request $request)
