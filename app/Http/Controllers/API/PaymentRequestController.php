@@ -27,8 +27,8 @@ class PaymentRequestController extends Controller
         $companyid = $request->get("companyid");
         $start_date = $request->get("start_date");
         $end_date = $request->get("end_date");
-        
-        return  PaymentRequest::whereBetween('expiry_date', [$start_date, $end_date])->get();
+
+        return  PaymentRequest::whereBetween('expiry_date', [$start_date, $end_date])->where('paid_company_id', $companyid)->get();
         dd($companyid);
 
         if ($filter) {
