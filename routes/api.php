@@ -8,7 +8,7 @@ use App\Http\Controllers\API\paymenttypesapiController;
 use App\Http\Controllers\API\paymentrequestcategoryapiController;
 use App\Http\Controllers\API\ChequeStatusApiController;
 use App\Http\Controllers\API\ChequeApiController;
-use App\Http\Controllers\API\companytypesapi;
+use App\Http\Controllers\API\CompanyTypesApi;
 use App\Http\Controllers\API\creditcardapiController;
 use App\Http\Controllers\API\CurrencyController;
 /*
@@ -64,11 +64,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::POST('/cheques/update/{id}', [ChequeApiController::class, 'update']);
     Route::POST('/cheques/store', [ChequeApiController::class, 'store']);
     //Departments
-    Route::GET('/companytypes', [companytypesapi::class, 'index']);
-    Route::GET('/companytypes/destroy/{id}', [companytypesapi::class, 'destroy']);
-    Route::GET('/companytypes/edit/{id}', [companytypesapi::class, 'edit']);
-    Route::POST('/companytypes/store', [companytypesapi::class, 'store']);
-    Route::POST('/companytypes/update/{id}', [companytypesapi::class, 'update']);
+    Route::GET('/companytypes', [CompanyTypesApi::class, 'index']);
+    Route::GET('/companytypes/destroy/{id}', [CompanyTypesApi::class, 'destroy']);
+    Route::GET('/companytypes/edit/{id}', [CompanyTypesApi::class, 'edit']);
+    Route::POST('/companytypes/store', [CompanyTypesApi::class, 'store']);
+    Route::POST('/companytypes/update/{id}', [CompanyTypesApi::class, 'update']);
     //Credit Cards
     Route::GET('/creditcards', [creditcardapiController::class, 'index']);
     Route::GET('/creditcards/edit/{id}', [creditcardapiController::class, 'edit']);
