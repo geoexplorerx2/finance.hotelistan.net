@@ -27,8 +27,9 @@ class PaymentRequestController extends Controller
         $paid_company_id = $request->get("companyid");
         $start_date = $request->get("start_date");
         $end_date = $request->get("end_date");
+        $result = null;
         if (!empty($paid_company_id) && !empty($start_date) && !empty($end_date)) {
-            return PaymentRequest::whereBetween('expiry_date', [$start_date, $end_date])->where('paid_company_id', $paid_company_id)->paginate(20);
+            $result = PaymentRequest::whereBetween('expiry_date', [$start_date, $end_date])->where('paid_company_id', $paid_company_id)->paginate(20);
         }
         dd("Progress stopped");
 
