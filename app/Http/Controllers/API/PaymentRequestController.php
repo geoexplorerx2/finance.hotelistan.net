@@ -31,7 +31,8 @@ class PaymentRequestController extends Controller
         if (!empty($paid_company_id) && !empty($start_date) && !empty($end_date)) {
             $result = PaymentRequest::whereBetween('expiry_date', [$start_date, $end_date])->where('paid_company_id', $paid_company_id)->paginate(20);
         }
-        dd("Progress stopped");
+        return $result;
+        
 
         if ($filter) {
             $validate = Validator::make([
