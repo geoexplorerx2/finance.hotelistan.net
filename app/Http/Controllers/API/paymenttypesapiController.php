@@ -18,7 +18,7 @@ class paymenttypesapiController extends Controller
             $payment_types = PaymentType::all();
             $data = array('payment_types' => $payment_types);
             return response()->json([
-                'code' => true,
+                'status' => true,
                 'data' => $data,
             ]);
         } catch (\Throwable $th) {
@@ -37,12 +37,12 @@ class paymenttypesapiController extends Controller
 
             if ($result) {
                 return response()->json([
-                    'code' => true,
+                    'status' => true,
                     'message' => 'Ödeme Türü Başarıyla Kaydedidi!',
                 ]);
             } else {
                 return response()->json([
-                    'code' => false,
+                    'status' => false,
                     'message' => 'Opration Failed',
                 ]);
             }
@@ -57,7 +57,7 @@ class paymenttypesapiController extends Controller
             $payment_type = PaymentType::where('id', '=', $id)->first();
 
             return response()->json([
-                'code' => true,
+                'status' => true,
                 'data' => $payment_type,
             ]);
         } catch (\Throwable $th) {
@@ -93,18 +93,18 @@ class paymenttypesapiController extends Controller
         if (PaymentType::where('id', $id)->count() > 0) {
             if (PaymentType::find($id)->delete()) {
                 return response()->json([
-                    'code' => true,
+                    'status' => true,
                     'message' => 'record deleted successfully!',
                 ]);
             } else {
                 return response()->json([
-                    'code' => false,
+                    'status' => false,
                     'message' => 'Operation Failes!',
                 ]);
             }
         } else {
             return response()->json([
-                'code' => false,
+                'status' => false,
                 'message' => 'There is no record for this ID!',
             ]);
         }

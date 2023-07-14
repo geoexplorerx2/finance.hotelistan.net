@@ -15,7 +15,7 @@ class paymentrequestcategoryapiController extends Controller
             $payment_request_categories = PaymentRequestCategory::all();
             $data = array('payment_request_categories' => $payment_request_categories);
             return response()->json([
-                'code' => true,
+                'status' => true,
                 'data' => $data,
             ]);
         } catch (\Throwable $th) {
@@ -36,12 +36,12 @@ class paymentrequestcategoryapiController extends Controller
 
             if ($newData->save()) {
                 return response()->json([
-                    'code' => true,
+                    'status' => true,
                     'message' => 'Ödeme Talebi Durumu Başarıyla Eklendi!',
                 ]);
             } else {
                 return response()->json([
-                    'code' => false,
+                    'status' => false,
                     'message' => 'operation failed',
                 ]);
             }
@@ -55,7 +55,7 @@ class paymentrequestcategoryapiController extends Controller
         try {
             $payment_request_categories = PaymentRequestCategory::where('id', '=', $id)->first();
             return response()->json([
-                'code' => true,
+                'status' => true,
                 'data' => $payment_request_categories,
             ]);
         } catch (\Throwable $th) {
@@ -75,12 +75,12 @@ class paymentrequestcategoryapiController extends Controller
 
             if (PaymentRequestCategory::where('id', '=', $id)->update($temp)) {
                 return response()->json([
-                    'code' => true,
+                    'status' => true,
                     'message' => 'Ödeme Talebi Durumu Başarıyla Güncellendi!',
                 ]);
             } else {
                 return response()->json([
-                    'code' => false,
+                    'status' => false,
                     'message' => 'Operation failed',
                 ]);
             }
@@ -95,18 +95,18 @@ class paymentrequestcategoryapiController extends Controller
         if (PaymentRequestCategory::where('id', $id)->count() > 0) {
             if (PaymentRequestCategory::find($id)->delete()) {
                 return response()->json([
-                    'code' => true,
+                    'status' => true,
                     'message' => 'record deleted successfully!',
                 ]);
             } else {
                 return response()->json([
-                    'code' => false,
+                    'status' => false,
                     'message' => 'Operation Failes!',
                 ]);
             }
         } else {
             return response()->json([
-                'code' => false,
+                'status' => false,
                 'message' => 'There is no record for this ID!',
             ]);
         }

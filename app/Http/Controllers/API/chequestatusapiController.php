@@ -14,7 +14,7 @@ class chequestatusapiController extends Controller
             $cheque_statuses = ChequeStatus::all();
             $data = array('cheque_statuses' => $cheque_statuses);
             return response()->json([
-                'code' => 200,
+                'status' => 200,
                 'data' => $data,
             ]);
         } catch (\Throwable $th) {
@@ -35,12 +35,12 @@ class chequestatusapiController extends Controller
 
             if ($newData->save()) {
                 return response()->json([
-                    'code' => true,
+                    'status' => true,
                     'data' => 'Cheque Status Recorded Successfully !',
                 ]);
             } else {
                 return response()->json([
-                    'code' => 402,
+                    'status' => 402,
                     'data' => 'Operation Failed!',
                 ]);
             }
@@ -54,7 +54,7 @@ class chequestatusapiController extends Controller
         try {
             $cheque_statuses = ChequeStatus::where('id', '=', $id)->first();
             return response()->json([
-                'code' => true,
+                'status' => true,
                 'data' => $cheque_statuses,
             ]);
         } catch (\Throwable $th) {
@@ -74,12 +74,12 @@ class chequestatusapiController extends Controller
 
             if (ChequeStatus::where('id', '=', $id)->update($temp)) {
                 return response()->json([
-                    'code' => true,
+                    'status' => true,
                     'data', 'Çek Durumu Başarıyla Güncellendi!',
                 ]);
             } else {
                 return response()->json([
-                    'code' => false,
+                    'status' => false,
                     'data', 'Operation failed',
                 ]);
             }
@@ -94,18 +94,18 @@ class chequestatusapiController extends Controller
         if (ChequeStatus::where('id', $id)->count() > 0) {
             if (ChequeStatus::find($id)->delete()) {
                 return response()->json([
-                    'code' => true,
+                    'status' => true,
                     'message' => 'record deleted successfully!',
                 ]);
             } else {
                 return response()->json([
-                    'code' => false,
+                    'status' => false,
                     'message' => 'Operation Failes!',
                 ]);
             }
         } else {
             return response()->json([
-                'code' => false,
+                'status' => false,
                 'message' => 'There is no record for this ID!',
             ]);
         }

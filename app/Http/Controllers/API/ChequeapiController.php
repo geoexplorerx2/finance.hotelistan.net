@@ -20,7 +20,7 @@ class ChequeapiController extends Controller
             $chequestatuses = ChequeStatus::all();
             $data = array('cheques' => $cheques, 'companies' => $companies, 'chequestatuses' => $chequestatuses);
             return response()->json([
-                'code' => 200,
+                'status' => 200,
                 'data' => $data,
             ]);
         } catch (\Throwable $th) {
@@ -46,12 +46,12 @@ class ChequeapiController extends Controller
 
             if ($result) {
                 return response()->json([
-                    'code' => 200,
+                    'status' => 200,
                     'data' => 'Çek Başarıyla Kaydedildi!',
                 ]);
             } else {
                 return response()->json([
-                    'code' => 402,
+                    'status' => 402,
                     'data' => 'Operation Failed!',
                 ]);
             }
@@ -67,7 +67,7 @@ class ChequeapiController extends Controller
             $companies = Companies::all();
             $chequestatuses = ChequeStatus::all();
             return response()->json([
-                'code' => true, 'cheque' => $cheque, 'companies' => $companies, 'chequestatuses' => $chequestatuses
+                'status' => true, 'cheque' => $cheque, 'companies' => $companies, 'chequestatuses' => $chequestatuses
             ]);
         } catch (\Throwable $th) {
             throw $th;
@@ -92,12 +92,12 @@ class ChequeapiController extends Controller
 
             if (Cheques::where('id', '=', $id)->update($temp)) {
                 return response()->json([
-                    'code' => 200,
+                    'status' => 200,
                     'data' => 'Çek Başarıyla Güncellendi!',
                 ]);
             } else {
                 return response()->json([
-                    'code' => 402,
+                    'status' => 402,
                     'data' => 'Operation Failed!',
                 ]);
             }
@@ -111,18 +111,18 @@ class ChequeapiController extends Controller
         if (Cheques::where('id', $id)->count() > 0) {
             if (Cheques::find($id)->delete()) {
                 return response()->json([
-                    'code' => 200,
+                    'status' => 200,
                     'message' => 'record deleted successfully!',
                 ]);
             } else {
                 return response()->json([
-                    'code' => 400,
+                    'status' => 400,
                     'message' => 'Operation Failes!',
                 ]);
             }
         } else {
             return response()->json([
-                'code' => 400,
+                'status' => 400,
                 'message' => 'There is no record for this ID!',
             ]);
         }
