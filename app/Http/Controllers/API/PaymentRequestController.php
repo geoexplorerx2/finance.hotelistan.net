@@ -29,6 +29,31 @@ class PaymentRequestController extends Controller
         $end_date = $request->get("end_date");
         $result = null;
         $temp = array();
+
+        if ($filter) {
+            $validate = Validator::make([
+                "filter" => $filter
+            ], [
+                "filter" => "in:requested,waiting,completed,later"
+            ]);
+            if ($validate->fails()) {
+                return $validate->errors();
+            }
+            switch ($filter) {
+                case "requested":
+                    $query->where('payment_request_status_id', 1);
+                    break;
+                case "waiting":
+                    $query->where('payment_request_status_id', 4);
+                    break;
+                case "completed":
+                    $query->where('payment_request_status_id', 2);
+                    break;
+                case "later":
+                    $query->where('payment_request_status_id', 3);
+                    break;
+            }
+        }
         if (!empty($paid_company_id) && !empty($start_date) && !empty($end_date)) {
             $result = PaymentRequest::whereBetween('expiry_date', [$start_date, $end_date])->where('paid_company_id', $paid_company_id)->paginate(20);
         }
@@ -59,33 +84,6 @@ class PaymentRequestController extends Controller
         //     array_push($temp,json_encode('{"welcome":"1"}'));
         // }
         return response()->json($result);
-
-
-        if ($filter) {
-            $validate = Validator::make([
-                "filter" => $filter
-            ], [
-                "filter" => "in:requested,waiting,completed,later"
-            ]);
-            if ($validate->fails()) {
-                return $validate->errors();
-            }
-            switch ($filter) {
-                case "requested":
-                    $query->where('payment_request_status_id', 1);
-                    break;
-                case "waiting":
-                    $query->where('payment_request_status_id', 4);
-                    break;
-                case "completed":
-                    $query->where('payment_request_status_id', 2);
-                    break;
-                case "later":
-                    $query->where('payment_request_status_id', 3);
-                    break;
-            }
-        }
-        return $query->paginate(20);
     }
 
     private function setRequestValues(PaymentRequest $paymentRequest, Request $request)
