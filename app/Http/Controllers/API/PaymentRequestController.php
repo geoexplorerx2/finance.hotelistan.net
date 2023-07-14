@@ -86,7 +86,7 @@ class PaymentRequestController extends Controller
             // $id = (json_decode(json_encode($item), true))["payment_request_status_id"]
             array_push($temp,1);
         }
-        return response()->json($temp);
+        return response()->json($result);
     }
 
     private function setRequestValues(PaymentRequest $paymentRequest, Request $request)
