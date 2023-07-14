@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 
-class creditcardapiController extends Controller
+class CreditCardApiController extends Controller
 {
     public function index()
     {
