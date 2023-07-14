@@ -58,7 +58,7 @@ class PaymentRequestController extends Controller
         //     // $id = (json_decode(json_encode($item), true))["payment_request_status_id"]
         //     array_push($temp,json_encode('{"welcome":"1"}'));
         // }
-        return $result;
+        return response()->json($result);
 
 
         if ($filter) {
