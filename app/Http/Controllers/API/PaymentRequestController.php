@@ -53,8 +53,10 @@ class PaymentRequestController extends Controller
         if (empty($paid_company_id) && empty($start_date) && empty($end_date)) {
             $result = PaymentRequest::paginate(20);
         }
-        // foreach($result as $item){
-        //     $id = PaymentRequest::find($item->id);
+        // foreach((json_decode(json_encode($result), true))['data'] as $item){
+        //     // $id = PaymentRequest::find((json_decode(json_encode($item), true))["id"]);
+        //     // $id = (json_decode(json_encode($item), true))["payment_request_status_id"]
+        //     array_push($temp,json_encode('{"welcome":"1"}'));
         // }
         return $result;
 
