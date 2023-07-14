@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ChequeStatus;
 use Illuminate\Http\Request;
 
-class chequestatusapiController extends Controller
+class ChequeStatusApiController extends Controller
 {
     public function index()
     {
@@ -14,7 +14,7 @@ class chequestatusapiController extends Controller
             $cheque_statuses = ChequeStatus::all();
             $data = array('cheque_statuses' => $cheque_statuses);
             return response()->json([
-                'status' => 200,
+                'status' => true,
                 'data' => $data,
             ]);
         } catch (\Throwable $th) {

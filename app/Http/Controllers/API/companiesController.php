@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Companies;
 use App\Models\PaymentType;
 
-class companiesController extends Controller
+class CompaniesController extends Controller
 {
     public function store(Request $request)
     {
