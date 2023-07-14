@@ -16,6 +16,7 @@ use App\Models\PaymentType;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rules\Unique;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PaymentRequestController extends Controller
 {
@@ -83,14 +84,15 @@ class PaymentRequestController extends Controller
         if (empty($paid_company_id) && empty($start_date) && empty($end_date)) {
             $result = PaymentRequest::paginate(20);
         }
-        foreach ((json_decode(json_encode($result), true))['data'] as $item) {
-            // PaymentRequestStatus::find((json_decode(json_encode($item), true))["payment_request_status_id"])->name
-            // PaymentRequestCategory::find((json_decode(json_encode($item), true))["payment_request_category_id"])->name
-            // Companies::find((json_decode(json_encode($item), true))["paid_company_id"])->name
-            // PaymentType::find((json_decode(json_encode($item), true))["payment_type_id"])->name
-            // User::find((json_decode(json_encode($item), true))["user_id"])->name
-            // array_push($temp, );
-        }
+        $result->getCollection()->transform(function ($item) {
+            $item['payment_request_status_name'] = PaymentRequestStatus::find((json_decode(json_encode($item), true))["payment_request_status_id"])->name;
+            $item['payment_request_category_name'] = PaymentRequestCategory::find((json_decode(json_encode($item), true))["payment_request_category_id"])->name;
+            $item['paid_company_name'] = Companies::find((json_decode(json_encode($item), true))["paid_company_id"])->name;
+            $item['payment_type_name'] = PaymentType::find((json_decode(json_encode($item), true))["payment_type_id"])->name;
+            $item['user_name'] = User::find((json_decode(json_encode($item), true))["user_id"])->name;
+            return $item;
+        });
+
         return response()->json($result);
     }
 
