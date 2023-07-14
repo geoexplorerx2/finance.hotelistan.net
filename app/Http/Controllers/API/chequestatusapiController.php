@@ -40,7 +40,7 @@ class ChequeStatusApiController extends Controller
                 ]);
             } else {
                 return response()->json([
-                    'status' => 402,
+                    'status' => false,
                     'data' => 'Operation Failed!',
                 ]);
             }
