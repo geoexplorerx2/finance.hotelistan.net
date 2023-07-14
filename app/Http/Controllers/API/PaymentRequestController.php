@@ -93,7 +93,10 @@ class PaymentRequestController extends Controller
             return $item;
         });
 
-        return response()->json($result);
+        return response()->json([
+            "status" => true,
+            "data" => $result,
+        ]);
     }
 
     private function setRequestValues(PaymentRequest $paymentRequest, Request $request)
