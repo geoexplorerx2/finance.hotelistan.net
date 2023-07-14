@@ -93,8 +93,13 @@ class PaymentRequestController extends Controller
             $item['answered_user_name'] = User::find((json_decode(json_encode($item), true))["answered_user_id"]) != null ? User::find((json_decode(json_encode($item), true))["answered_user_id"])->name : '';
             return $item;
         });
-
-        return response()->json($result);
+        // return (json_decode(json_encode($result), true))["current_page"];
+        $data = collect([
+            "current_page" => (json_decode(json_encode($result), true))["current_page"],
+            "status" => true,
+            'data' => (json_decode(json_encode($result), true))["data"]
+        ]);
+        return $data;
     }
 
     private function setRequestValues(PaymentRequest $paymentRequest, Request $request)
