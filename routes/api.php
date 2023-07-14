@@ -3,13 +3,13 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\companiesController;
-use App\Http\Controllers\API\paymenttypesapiController;
-use App\Http\Controllers\API\paymentrequestcategoryapiController;
-use App\Http\Controllers\API\chequestatusapiController;
-use App\Http\Controllers\API\ChequeapiController;
-use App\Http\Controllers\API\companytypesapi;
-use App\Http\Controllers\API\creditcardapiController;
+use App\Http\Controllers\API\CompaniesController;
+use App\Http\Controllers\API\PaymentTypesApiController;
+use App\Http\Controllers\API\PaymentRequestCategoryApiController;
+use App\Http\Controllers\API\ChequeStatusApiController;
+use App\Http\Controllers\API\ChequeApiController;
+use App\Http\Controllers\API\CompanyTypesApi;
+use App\Http\Controllers\API\CreditCardApiController;
 use App\Http\Controllers\API\CurrencyController;
 /*
 |--------------------------------------------------------------------------
@@ -35,46 +35,46 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         return $request->user();
     });
     //Companies
-    Route::GET('/companies/show', [companiesController::class, 'show']);
-    Route::POST('/companies/store', [companiesController::class, 'store']);
-    Route::POST('/companies/update/{id}', [companiesController::class, 'update']);
-    Route::GET('/companies/destroy/{id}', [companiesController::class, 'destroy']);
+    Route::GET('/companies/show', [CompaniesController::class, 'show']);
+    Route::POST('/companies/store', [CompaniesController::class, 'store']);
+    Route::POST('/companies/update/{id}', [CompaniesController::class, 'update']);
+    Route::GET('/companies/destroy/{id}', [CompaniesController::class, 'destroy']);
     //Payment Types
-    Route::GET('/paymenttypes', [paymenttypesapiController::class, 'index']);
-    Route::GET('/paymenttypes/edit/{id}', [paymenttypesapiController::class, 'edit']);
-    Route::GET('/paymenttypes/destroy/{id}', [paymenttypesapiController::class, 'destroy']);
-    Route::POST('/paymenttypes/store', [paymenttypesapiController::class, 'store']);
-    Route::POST('/paymenttypes/update/{id}', [paymenttypesapiController::class, 'update']);
+    Route::GET('/paymenttypes', [PaymentTypesApiController::class, 'index']);
+    Route::GET('/paymenttypes/edit/{id}', [PaymentTypesApiController::class, 'edit']);
+    Route::GET('/paymenttypes/destroy/{id}', [PaymentTypesApiController::class, 'destroy']);
+    Route::POST('/paymenttypes/store', [PaymentTypesApiController::class, 'store']);
+    Route::POST('/paymenttypes/update/{id}', [PaymentTypesApiController::class, 'update']);
     //Payment Request Category
-    Route::GET('/paymentrequestcategory', [paymentrequestcategoryapiController::class, 'index']);
-    Route::GET('/paymentrequestcategory/edit/{id}', [paymentrequestcategoryapiController::class, 'edit']);
-    Route::GET('/paymentrequestcategory/destroy/{id}', [paymentrequestcategoryapiController::class, 'destroy']);
-    Route::POST('/paymentrequestcategory/store', [paymentrequestcategoryapiController::class, 'store']);
-    Route::POST('/paymentrequestcategory/update/{id}', [paymentrequestcategoryapiController::class, 'update']);
+    Route::GET('/paymentrequestcategory', [PaymentRequestCategoryApiController::class, 'index']);
+    Route::GET('/paymentrequestcategory/edit/{id}', [PaymentRequestCategoryApiController::class, 'edit']);
+    Route::GET('/paymentrequestcategory/destroy/{id}', [PaymentRequestCategoryApiController::class, 'destroy']);
+    Route::POST('/paymentrequestcategory/store', [PaymentRequestCategoryApiController::class, 'store']);
+    Route::POST('/paymentrequestcategory/update/{id}', [PaymentRequestCategoryApiController::class, 'update']);
     //Cheque Status
-    Route::GET('/chequestatus', [chequestatusapiController::class, 'index']);
-    Route::GET('/chequestatus/edit/{id}', [chequestatusapiController::class, 'edit']);
-    Route::GET('/chequestatus/destroy/{id}', [chequestatusapiController::class, 'destroy']);
-    Route::POST('/chequestatus/store', [chequestatusapiController::class, 'store']);
-    Route::POST('/chequestatus/update/{id}', [chequestatusapiController::class, 'update']);
+    Route::GET('/chequestatus', [ChequeStatusApiController::class, 'index']);
+    Route::GET('/chequestatus/edit/{id}', [ChequeStatusApiController::class, 'edit']);
+    Route::GET('/chequestatus/destroy/{id}', [ChequeStatusApiController::class, 'destroy']);
+    Route::POST('/chequestatus/store', [ChequeStatusApiController::class, 'store']);
+    Route::POST('/chequestatus/update/{id}', [ChequeStatusApiController::class, 'update']);
     //Cheque
-    Route::GET('/cheques', [ChequeapiController::class, 'index']);
-    Route::GET('/cheques/edit/{id}', [ChequeapiController::class, 'edit']);
-    Route::GET('/cheques/destroy/{id}', [ChequeapiController::class, 'destroy']);
-    Route::POST('/cheques/update/{id}', [ChequeapiController::class, 'update']);
-    Route::POST('/cheques/store', [ChequeapiController::class, 'store']);
+    Route::GET('/cheques', [ChequeApiController::class, 'index']);
+    Route::GET('/cheques/edit/{id}', [ChequeApiController::class, 'edit']);
+    Route::GET('/cheques/destroy/{id}', [ChequeApiController::class, 'destroy']);
+    Route::POST('/cheques/update/{id}', [ChequeApiController::class, 'update']);
+    Route::POST('/cheques/store', [ChequeApiController::class, 'store']);
     //Departments
-    Route::GET('/companytypes', [companytypesapi::class, 'index']);
-    Route::GET('/companytypes/destroy/{id}', [companytypesapi::class, 'destroy']);
-    Route::GET('/companytypes/edit/{id}', [companytypesapi::class, 'edit']);
-    Route::POST('/companytypes/store', [companytypesapi::class, 'store']);
-    Route::POST('/companytypes/update/{id}', [companytypesapi::class, 'update']);
+    Route::GET('/companytypes', [CompanyTypesApi::class, 'index']);
+    Route::GET('/companytypes/destroy/{id}', [CompanyTypesApi::class, 'destroy']);
+    Route::GET('/companytypes/edit/{id}', [CompanyTypesApi::class, 'edit']);
+    Route::POST('/companytypes/store', [CompanyTypesApi::class, 'store']);
+    Route::POST('/companytypes/update/{id}', [CompanyTypesApi::class, 'update']);
     //Credit Cards
-    Route::GET('/creditcards', [creditcardapiController::class, 'index']);
-    Route::GET('/creditcards/edit/{id}', [creditcardapiController::class, 'edit']);
-    Route::GET('/creditcards/destroy/{id}', [creditcardapiController::class, 'destroy']);
-    Route::POST('/creditcards/store', [creditcardapiController::class, 'store']);
-    Route::POST('/creditcards/update/{id}', [creditcardapiController::class, 'update']);
+    Route::GET('/creditcards', [CreditCardApiController::class, 'index']);
+    Route::GET('/creditcards/edit/{id}', [CreditCardApiController::class, 'edit']);
+    Route::GET('/creditcards/destroy/{id}', [CreditCardApiController::class, 'destroy']);
+    Route::POST('/creditcards/store', [CreditCardApiController::class, 'store']);
+    Route::POST('/creditcards/update/{id}', [CreditCardApiController::class, 'update']);
 
     //Dashboard
     Route::GET('/dashboard/counts', 'App\Http\Controllers\API\DashboardController@counts');

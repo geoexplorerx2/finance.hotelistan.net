@@ -90,6 +90,7 @@ class PaymentRequestController extends Controller
             $item['paid_company_name'] = Companies::find((json_decode(json_encode($item), true))["paid_company_id"])->name;
             $item['payment_type_name'] = PaymentType::find((json_decode(json_encode($item), true))["payment_type_id"])->name;
             $item['user_name'] = User::find((json_decode(json_encode($item), true))["user_id"])->name;
+            $item['answered_user_name'] = User::find((json_decode(json_encode($item), true))["user_id"])->name;
             return $item;
         });
 

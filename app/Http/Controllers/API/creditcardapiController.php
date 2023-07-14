@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 
-class creditcardapiController extends Controller
+class CreditCardApiController extends Controller
 {
     public function index()
     {
@@ -15,7 +15,7 @@ class creditcardapiController extends Controller
             $creditcards = CreditCards::all();
             $data = array('creditcards' => $creditcards);
             return response()->json([
-                'code' => 200,
+                'status' => true,
                 'data' => $data,
             ]);
         } catch (\Throwable $th) {
@@ -38,12 +38,12 @@ class creditcardapiController extends Controller
 
             if ($result) {
                 return response()->json([
-                    'code' => 200,
+                    'status' => true,
                     'data' => 'Kredi Kart Başarıyla Kaydedildi!',
                 ]);
             } else {
                 return response()->json([
-                    'code' => 402,
+                    'status' => false,
                     'data' => 'Operation Failed',
                 ]);
             }
@@ -77,12 +77,12 @@ class creditcardapiController extends Controller
 
             if (CreditCards::where('id', '=', $id)->update($temp)) {
                 return response()->json([
-                    'code' => 200,
+                    'status' => true,
                     'data' => 'Kredi Kart Başarıyla Güncellendi!',
                 ]);
             } else {
                 return response()->json([
-                    'code' => 402,
+                    'status' => false,
                     'data' => 'Operation Failed!',
                 ]);
             }
@@ -96,18 +96,18 @@ class creditcardapiController extends Controller
         if (CreditCards::where('id', $id)->count() > 0) {
             if (CreditCards::find($id)->delete()) {
                 return response()->json([
-                    'code' => 200,
+                    'status' => true,
                     'message' => 'record deleted successfully!',
                 ]);
             } else {
                 return response()->json([
-                    'code' => 400,
+                    'status' => false,
                     'message' => 'Operation Failes!',
                 ]);
             }
         } else {
             return response()->json([
-                'code' => 400,
+                'status' => false,
                 'message' => 'There is no record for this ID!',
             ]);
         }

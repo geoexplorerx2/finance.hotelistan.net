@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
-class companytypesapi extends Controller
+class CompanyTypesApi extends Controller
 {
     public function index()
     {
@@ -15,7 +15,7 @@ class companytypesapi extends Controller
             $company_types = CompanyType::all();
             $data = array('company_types' => $company_types);
             return response()->json([
-                'code' => 200,
+                'status' => true,
                 'data' => $data,
             ]);
         } catch (\Throwable $th) {
@@ -34,7 +34,7 @@ class companytypesapi extends Controller
 
             if ($result) {
                 return response()->json([
-                    'code' => 200,
+                    'status' => true,
                     'data' => 'Firma Türü Başarıyla Kaydedidi!',
                 ]);
             } else {
@@ -51,7 +51,7 @@ class companytypesapi extends Controller
             $company_type = CompanyType::where('id', '=', $id)->first();
 
             return response()->json([
-                'code' => 200,
+                'status' => true,
                 'data' => $company_type,
             ]);
         } catch (\Throwable $th) {
@@ -69,14 +69,14 @@ class companytypesapi extends Controller
 
             if (CompanyType::where('id', '=', $id)->update($temp)) {
                 return response()->json([
-                    'code' => 200,
+                    'status' => true,
                     'data' => 'Firma Türü Başarıyla Güncellendi!',
                 ]);
             } else {
                 return response()->json([
-                    'code' => 402,
+                    'status' => false,
                     'data' => 'Operation Failed',
-                ]);;
+                ]);
             }
         } catch (\Throwable $th) {
             throw $th;
@@ -89,18 +89,18 @@ class companytypesapi extends Controller
         if (CompanyType::where('id', $id)->count() > 0) {
             if (CompanyType::find($id)->delete()) {
                 return response()->json([
-                    'code' => 200,
+                    'status' => true,
                     'message' => 'record deleted successfully!',
                 ]);
             } else {
                 return response()->json([
-                    'code' => 400,
+                    'status' => false,
                     'message' => 'Operation Failes!',
                 ]);
             }
         } else {
             return response()->json([
-                'code' => 400,
+                'status' => false,
                 'message' => 'There is no record for this ID!',
             ]);
         }
