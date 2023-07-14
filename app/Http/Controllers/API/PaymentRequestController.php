@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
 use App\Models\PaymentRequestStatus;
+use App\Models\PaymentRequestCategory;
+use App\Models\Companies;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rules\Unique;
 
@@ -79,12 +81,13 @@ class PaymentRequestController extends Controller
         if (empty($paid_company_id) && empty($start_date) && empty($end_date)) {
             $result = PaymentRequest::paginate(20);
         }
-        foreach((json_decode(json_encode($result), true))['data'] as $item){
+        foreach ((json_decode(json_encode($result), true))['data'] as $item) {
             // PaymentRequestStatus::find((json_decode(json_encode($item), true))["payment_request_status_id"])->name
-            
-            // $id = PaymentRequestStatus::find((json_decode(json_encode($item), true))["payment_request_status_id"]);
+            // PaymentRequestCategory::find((json_decode(json_encode($item), true))["payment_request_category_id"])->name
+            // Companies::find((json_decode(json_encode($item), true))["paid_company_id"])->name
+            // $id = PaymentRequestStatus::find((json_decode(json_encode($item), true))["pay_company_id"]);
             // $id = (json_decode(json_encode($item), true))["payment_request_status_id"]
-            array_push($temp,1);
+            array_push($temp, Companies::find((json_decode(json_encode($item), true))["paid_company_id"])->name);
         }
         return response()->json($result);
     }
