@@ -9,8 +9,14 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
+use App\Models\PaymentRequestStatus;
+use App\Models\PaymentRequestCategory;
+use App\Models\Companies;
+use App\Models\PaymentType;
+use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rules\Unique;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PaymentRequestController extends Controller
 {
@@ -78,12 +84,19 @@ class PaymentRequestController extends Controller
         if (empty($paid_company_id) && empty($start_date) && empty($end_date)) {
             $result = PaymentRequest::paginate(20);
         }
-        // foreach((json_decode(json_encode($result), true))['data'] as $item){
-        //     // $id = PaymentRequest::find((json_decode(json_encode($item), true))["id"]);
-        //     // $id = (json_decode(json_encode($item), true))["payment_request_status_id"]
-        //     array_push($temp,json_encode('{"welcome":"1"}'));
-        // }
-        return response()->json($result);
+        $result->getCollection()->transform(function ($item) {
+            $item['payment_request_status_name'] = PaymentRequestStatus::find((json_decode(json_encode($item), true))["payment_request_status_id"])->name;
+            $item['payment_request_category_name'] = PaymentRequestCategory::find((json_decode(json_encode($item), true))["payment_request_category_id"])->name;
+            $item['paid_company_name'] = Companies::find((json_decode(json_encode($item), true))["paid_company_id"])->name;
+            $item['payment_type_name'] = PaymentType::find((json_decode(json_encode($item), true))["payment_type_id"])->name;
+            $item['user_name'] = User::find((json_decode(json_encode($item), true))["user_id"])->name;
+            return $item;
+        });
+
+        return response()->json([
+            "status" => true,
+            "data" => $result,
+        ]);
     }
 
     private function setRequestValues(PaymentRequest $paymentRequest, Request $request)
