@@ -49,6 +49,9 @@ class PaymentRequestController extends Controller
         if (empty($paid_company_id) && !empty($start_date) && empty($end_date)) {
             $result = PaymentRequest::where('expiry_date', '>=', $start_date)->get();
         }
+        if (empty($paid_company_id) && empty($start_date) && empty($end_date)) {
+            $result = PaymentRequest::all();
+        }
         return $result;
 
 
