@@ -35,7 +35,7 @@ class chequestatusapiController extends Controller
 
             if ($newData->save()) {
                 return response()->json([
-                    'code' => 200,
+                    'code' => true,
                     'data' => 'Cheque Status Recorded Successfully !',
                 ]);
             } else {
@@ -54,7 +54,7 @@ class chequestatusapiController extends Controller
         try {
             $cheque_statuses = ChequeStatus::where('id', '=', $id)->first();
             return response()->json([
-                'code' => 200,
+                'code' => true,
                 'data' => $cheque_statuses,
             ]);
         } catch (\Throwable $th) {
@@ -74,12 +74,12 @@ class chequestatusapiController extends Controller
 
             if (ChequeStatus::where('id', '=', $id)->update($temp)) {
                 return response()->json([
-                    'code' => 200,
+                    'code' => true,
                     'data', 'Çek Durumu Başarıyla Güncellendi!',
                 ]);
             } else {
                 return response()->json([
-                    'code' => 402,
+                    'code' => false,
                     'data', 'Operation failed',
                 ]);
             }
@@ -94,18 +94,18 @@ class chequestatusapiController extends Controller
         if (ChequeStatus::where('id', $id)->count() > 0) {
             if (ChequeStatus::find($id)->delete()) {
                 return response()->json([
-                    'code' => 200,
+                    'code' => true,
                     'message' => 'record deleted successfully!',
                 ]);
             } else {
                 return response()->json([
-                    'code' => 400,
+                    'code' => false,
                     'message' => 'Operation Failes!',
                 ]);
             }
         } else {
             return response()->json([
-                'code' => 400,
+                'code' => false,
                 'message' => 'There is no record for this ID!',
             ]);
         }

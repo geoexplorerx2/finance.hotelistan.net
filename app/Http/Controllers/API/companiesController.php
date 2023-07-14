@@ -33,12 +33,12 @@ class companiesController extends Controller
 
                 if ($result) {
                     return response()->json([
-                        "code" => 200,
+                        "code" => true,
                         'message' => 'Firma Başarıyla Kaydedidi!'
                     ]);
                 } else {
                     return response()->json([
-                        "code" => 403,
+                        "code" => false,
                         'message' => 'Operation Failed',
                     ]);
                 }
@@ -47,7 +47,7 @@ class companiesController extends Controller
             }
         } else {
             return response()->json([
-                "code" => 403,
+                "code" => false,
                 'message' => 'These phonenumbers and IBAN numbers Already recorded'
             ]);
         }
@@ -59,7 +59,7 @@ class companiesController extends Controller
             $companies = Companies::all();
             $data = array('companies' => $companies, 'payment_types' => $payment_types);
             return response()->json([
-                "code" => 200,
+                "code" => true,
                 "data" => $data,
             ]);
         } catch (\Throwable $th) {
@@ -96,18 +96,18 @@ class companiesController extends Controller
         if (Companies::where('id', $id)->count() > 0) {
             if (Companies::find($id)->delete()) {
                 return response()->json([
-                    'code' => 200,
+                    'code' => true,
                     'message' => 'record deleted successfully!',
                 ]);
             } else {
                 return response()->json([
-                    'code' => 400,
+                    'code' => false,
                     'message' => 'Operation Failes!',
                 ]);
             }
         } else {
             return response()->json([
-                'code' => 400,
+                'code' => true,
                 'message' => 'There is no record for this ID!',
             ]);
         }

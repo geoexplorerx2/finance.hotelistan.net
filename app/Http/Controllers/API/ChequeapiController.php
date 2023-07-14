@@ -67,7 +67,7 @@ class ChequeapiController extends Controller
             $companies = Companies::all();
             $chequestatuses = ChequeStatus::all();
             return response()->json([
-                'code' => 200, 'cheque' => $cheque, 'companies' => $companies, 'chequestatuses' => $chequestatuses
+                'code' => true, 'cheque' => $cheque, 'companies' => $companies, 'chequestatuses' => $chequestatuses
             ]);
         } catch (\Throwable $th) {
             throw $th;

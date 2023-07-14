@@ -15,7 +15,7 @@ class companytypesapi extends Controller
             $company_types = CompanyType::all();
             $data = array('company_types' => $company_types);
             return response()->json([
-                'code' => 200,
+                'code' => true,
                 'data' => $data,
             ]);
         } catch (\Throwable $th) {
@@ -34,7 +34,7 @@ class companytypesapi extends Controller
 
             if ($result) {
                 return response()->json([
-                    'code' => 200,
+                    'code' => true,
                     'data' => 'Firma Türü Başarıyla Kaydedidi!',
                 ]);
             } else {
@@ -51,7 +51,7 @@ class companytypesapi extends Controller
             $company_type = CompanyType::where('id', '=', $id)->first();
 
             return response()->json([
-                'code' => 200,
+                'code' => true,
                 'data' => $company_type,
             ]);
         } catch (\Throwable $th) {
@@ -69,12 +69,12 @@ class companytypesapi extends Controller
 
             if (CompanyType::where('id', '=', $id)->update($temp)) {
                 return response()->json([
-                    'code' => 200,
+                    'code' => true,
                     'data' => 'Firma Türü Başarıyla Güncellendi!',
                 ]);
             } else {
                 return response()->json([
-                    'code' => 402,
+                    'code' => false,
                     'data' => 'Operation Failed',
                 ]);;
             }
@@ -89,18 +89,18 @@ class companytypesapi extends Controller
         if (CompanyType::where('id', $id)->count() > 0) {
             if (CompanyType::find($id)->delete()) {
                 return response()->json([
-                    'code' => 200,
+                    'code' => true,
                     'message' => 'record deleted successfully!',
                 ]);
             } else {
                 return response()->json([
-                    'code' => 400,
+                    'code' => false,
                     'message' => 'Operation Failes!',
                 ]);
             }
         } else {
             return response()->json([
-                'code' => 400,
+                'code' => false,
                 'message' => 'There is no record for this ID!',
             ]);
         }
