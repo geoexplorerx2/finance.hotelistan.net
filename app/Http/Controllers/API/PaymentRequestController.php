@@ -28,30 +28,34 @@ class PaymentRequestController extends Controller
         $start_date = $request->get("start_date");
         $end_date = $request->get("end_date");
         $result = null;
+        $temp = array();
         if (!empty($paid_company_id) && !empty($start_date) && !empty($end_date)) {
-            $result = PaymentRequest::whereBetween('expiry_date', [$start_date, $end_date])->where('paid_company_id', $paid_company_id)->get();
+            $result = PaymentRequest::whereBetween('expiry_date', [$start_date, $end_date])->where('paid_company_id', $paid_company_id)->paginate(20);
         }
         if (!empty($paid_company_id) && !empty($start_date) && empty($end_date)) {
-            $result = PaymentRequest::where('expiry_date', '>=', $start_date)->where('paid_company_id', $paid_company_id)->get();
+            $result = PaymentRequest::where('expiry_date', '>=', $start_date)->where('paid_company_id', $paid_company_id)->paginate(20);
         }
         if (!empty($paid_company_id) && empty($start_date) && !empty($end_date)) {
-            $result = PaymentRequest::where('expiry_date', '<=', $end_date)->where('paid_company_id', $paid_company_id)->get();
+            $result = PaymentRequest::where('expiry_date', '<=', $end_date)->where('paid_company_id', $paid_company_id)->paginate(20);
         }
         if (!empty($paid_company_id) && empty($start_date) && empty($end_date)) {
-            $result = PaymentRequest::where('paid_company_id', $paid_company_id)->get();
+            $result = PaymentRequest::where('paid_company_id', $paid_company_id)->paginate(20);
         }
         if (empty($paid_company_id) && !empty($start_date) && !empty($end_date)) {
-            $result = PaymentRequest::whereBetween('expiry_date', [$start_date, $end_date])->get();
+            $result = PaymentRequest::whereBetween('expiry_date', [$start_date, $end_date])->paginate(20);
         }
         if (empty($paid_company_id) && empty($start_date) && !empty($end_date)) {
-            $result = PaymentRequest::where('expiry_date', '<=', $end_date)->get();
+            $result = PaymentRequest::where('expiry_date', '<=', $end_date)->paginate(20);
         }
         if (empty($paid_company_id) && !empty($start_date) && empty($end_date)) {
-            $result = PaymentRequest::where('expiry_date', '>=', $start_date)->get();
+            $result = PaymentRequest::where('expiry_date', '>=', $start_date)->paginate(20);
         }
         if (empty($paid_company_id) && empty($start_date) && empty($end_date)) {
-            $result = PaymentRequest::all();
+            $result = PaymentRequest::paginate(20);
         }
+        // foreach($result as $item){
+        //     $id = PaymentRequest::find($item->id);
+        // }
         return $result;
 
 
