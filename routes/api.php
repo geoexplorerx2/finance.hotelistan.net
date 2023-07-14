@@ -4,8 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CompaniesController;
-use App\Http\Controllers\API\paymenttypesapiController;
-use App\Http\Controllers\API\paymentrequestcategoryapiController;
+use App\Http\Controllers\API\PaymentTypesApiController;
+use App\Http\Controllers\API\PaymentRequestCategoryApiController;
 use App\Http\Controllers\API\ChequeStatusApiController;
 use App\Http\Controllers\API\ChequeApiController;
 use App\Http\Controllers\API\CompanyTypesApi;
@@ -40,17 +40,17 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::POST('/companies/update/{id}', [CompaniesController::class, 'update']);
     Route::GET('/companies/destroy/{id}', [CompaniesController::class, 'destroy']);
     //Payment Types
-    Route::GET('/paymenttypes', [paymenttypesapiController::class, 'index']);
-    Route::GET('/paymenttypes/edit/{id}', [paymenttypesapiController::class, 'edit']);
-    Route::GET('/paymenttypes/destroy/{id}', [paymenttypesapiController::class, 'destroy']);
-    Route::POST('/paymenttypes/store', [paymenttypesapiController::class, 'store']);
-    Route::POST('/paymenttypes/update/{id}', [paymenttypesapiController::class, 'update']);
+    Route::GET('/paymenttypes', [PaymentTypesApiController::class, 'index']);
+    Route::GET('/paymenttypes/edit/{id}', [PaymentTypesApiController::class, 'edit']);
+    Route::GET('/paymenttypes/destroy/{id}', [PaymentTypesApiController::class, 'destroy']);
+    Route::POST('/paymenttypes/store', [PaymentTypesApiController::class, 'store']);
+    Route::POST('/paymenttypes/update/{id}', [PaymentTypesApiController::class, 'update']);
     //Payment Request Category
-    Route::GET('/paymentrequestcategory', [paymentrequestcategoryapiController::class, 'index']);
-    Route::GET('/paymentrequestcategory/edit/{id}', [paymentrequestcategoryapiController::class, 'edit']);
-    Route::GET('/paymentrequestcategory/destroy/{id}', [paymentrequestcategoryapiController::class, 'destroy']);
-    Route::POST('/paymentrequestcategory/store', [paymentrequestcategoryapiController::class, 'store']);
-    Route::POST('/paymentrequestcategory/update/{id}', [paymentrequestcategoryapiController::class, 'update']);
+    Route::GET('/paymentrequestcategory', [PaymentRequestCategoryApiController::class, 'index']);
+    Route::GET('/paymentrequestcategory/edit/{id}', [PaymentRequestCategoryApiController::class, 'edit']);
+    Route::GET('/paymentrequestcategory/destroy/{id}', [PaymentRequestCategoryApiController::class, 'destroy']);
+    Route::POST('/paymentrequestcategory/store', [PaymentRequestCategoryApiController::class, 'store']);
+    Route::POST('/paymentrequestcategory/update/{id}', [PaymentRequestCategoryApiController::class, 'update']);
     //Cheque Status
     Route::GET('/chequestatus', [ChequeStatusApiController::class, 'index']);
     Route::GET('/chequestatus/edit/{id}', [ChequeStatusApiController::class, 'edit']);

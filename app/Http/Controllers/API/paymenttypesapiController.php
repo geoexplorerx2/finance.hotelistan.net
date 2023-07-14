@@ -8,7 +8,7 @@ use App\Models\Companies;
 use App\Models\PaymentType;
 
 
-class paymenttypesapiController extends Controller
+class PaymentTypesApiController extends Controller
 {
 
 
