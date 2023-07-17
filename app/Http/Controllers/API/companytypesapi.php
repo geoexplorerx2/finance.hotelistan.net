@@ -16,7 +16,7 @@ class CompanyTypesApi extends Controller
             $data = array('company_types' => $company_types);
             return response()->json([
                 'status' => true,
-                'data' => $data,
+                'company_types' => (json_decode(json_encode($data), true))["company_types"],
             ]);
         } catch (\Throwable $th) {
             throw $th;
