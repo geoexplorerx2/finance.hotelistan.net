@@ -21,7 +21,7 @@ class ChequeApiController extends Controller
             $data = array('cheques' => $cheques, 'companies' => $companies, 'chequestatuses' => $chequestatuses);
             return response()->json([
                 'status' => true,
-                'data' => $data,
+                'cheques' => (json_decode(json_encode($data), true))["cheques"],
             ]);
         } catch (\Throwable $th) {
             throw $th;
