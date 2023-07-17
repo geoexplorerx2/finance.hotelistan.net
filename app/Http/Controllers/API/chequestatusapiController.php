@@ -13,9 +13,9 @@ class ChequeStatusApiController extends Controller
         try {
             $cheque_statuses = ChequeStatus::all();
             $data = array('cheque_statuses' => $cheque_statuses);
-            return response()->json([
-                'status' => true,
-                'data' => $data,
+            return collect([
+                "status"=>true,
+                "cheque_statuses"=>(json_decode(json_encode($data), true))["cheque_statuses"],
             ]);
         } catch (\Throwable $th) {
             throw $th;
