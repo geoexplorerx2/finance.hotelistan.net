@@ -32,6 +32,59 @@ class ResetPasswordController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
+    public function verifyToken(Request $request)
+    {
+        try {
+            $validateRequest = Validator::make(
+                $request->all(),
+                [
+                    'email' => 'required',
+                    'token' => 'required',
+                ]
+            );
+
+            if ($validateRequest->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validateRequest->errors()
+                ], 401);
+            }
+            $user = User::where('email', $request->email)->first();
+            if (!$user) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Bu e-posta ile kullanıcı bulunamadı.',
+                ], 401);
+            }
+
+            $passwordReset = PasswordReset::where("email", $user->email)->first();
+            if (!$passwordReset || $passwordReset->token != $request->token) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Girdiğiniz kod hatalı.',
+                ], 401);
+            } else if (strtotime($passwordReset->created_at) < strtotime("-5 minutes")) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Kodun süresi geçti.',
+                ], 401);
+            } else {
+                $passwordReset->verified = 1;
+                $passwordReset->save();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Kod doğrulandı.',
+                ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
     public function passwordReset(Request $request)
     {
         try {
@@ -56,30 +109,21 @@ class ResetPasswordController extends Controller
             if (!$user) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'There is no user found with this email.',
+                    'message' => 'Bu e-posta ile kullanıcı bulunamadı.',
                 ], 401);
             }
             $passwordReset = PasswordReset::where("email", $user->email)->first();
-            if ($passwordReset && strtotime($passwordReset->created_at) < strtotime("-5 minutes")) {
+            if (!$passwordReset || !$passwordReset->verified) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Token is expired.',
-                ], 401);
-            }
-            if (
-                !$passwordReset ||
-                $passwordReset->token != $request->token
-            ) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Token is invalid or used before.',
+                    'message' => 'Kod doğrulanmamış.',
                 ], 401);
             } else {
                 $this->resetPassword($user, $request->password);
                 $passwordReset->delete();
                 return response()->json([
                     'status' => true,
-                    'message' => 'Password reset successfully',
+                    'message' => 'Şifre başarıyla sıfırlandı.',
                 ]);
             }
         } catch (\Throwable $th) {

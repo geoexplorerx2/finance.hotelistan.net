@@ -48,10 +48,12 @@ class ForgotPasswordController extends Controller
             if (!$user) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'There is no user found with this email.',
+                    'message' => 'Bu e-posta ile kullanıcı bulunamadı.',
                 ], 401);
             }
-
+            if($existing = PasswordReset::where("email", $user->email)->first()){
+                $existing->delete();
+            }
             $otpCode = random_int(10000, 99999);
             $passwordReset = PasswordReset::where("email", $user->email)->first() ?: new PasswordReset();
             $passwordReset->email = $user->email;
@@ -59,19 +61,19 @@ class ForgotPasswordController extends Controller
             $passwordReset->save();
 
             $mailData = [
-                "subject" => "Reset Password",
+                "subject" => "Şifre sıfırla",
                 "to" => [
                     [
                         "address" => $user->email,
                         "name" => $user->name
                     ]
                 ],
-                "body" => "You can use this code to reset you password: {$otpCode}"
+                "body" => "Şifrenizi sıfırlamak için bu kodu kullanabilirsiniz: {$otpCode}"
             ];
             Mail::send(new FinanceCrmMail($mailData));
             $response = [
                 'status' => true,
-                'message' => 'Reset password mail sent successfully.'
+                'message' => 'Şifre sıfırlama e-postası başarıyla gönderildi.'
             ];
             return response()->json($response);
         } catch (\Throwable $th) {
