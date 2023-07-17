@@ -10,27 +10,24 @@ class CurrencyController extends Controller
 {
     public function show()
     {
-        $data = [
-            'currency_list' => [
-                [
-                    'name' => 'Euro',
-                    'value' => 'EUR',
-                ],
-                [
-                    'name' => 'Dollar',
-                    'value' => 'USD',
-                ],
-                [
-                    'name' => 'Pound',
-                    'value' => 'GBP',
-                ],
-                [
-                    'name' => 'Lira',
-                    'value' => 'TRY',
-                ],
-            ],
-        ];
 
-        return response()->json($data);
+        return collect(["status" => true, 'currency_list' => [
+            [
+                'name' => 'Euro',
+                'value' => 'EUR',
+            ],
+            [
+                'name' => 'Dollar',
+                'value' => 'USD',
+            ],
+            [
+                'name' => 'Pound',
+                'value' => 'GBP',
+            ],
+            [
+                'name' => 'Lira',
+                'value' => 'TRY',
+            ],
+        ]]);
     }
 }
