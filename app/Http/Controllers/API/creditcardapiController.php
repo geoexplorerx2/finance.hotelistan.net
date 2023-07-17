@@ -16,7 +16,7 @@ class CreditCardApiController extends Controller
             $data = array('creditcards' => $creditcards);
             return response()->json([
                 'status' => true,
-                'data' => $data,
+                'creditcards' => (json_decode(json_encode($data), true))["creditcards"],
             ]);
         } catch (\Throwable $th) {
             throw $th;
