@@ -17,9 +17,9 @@ class PaymentTypesApiController extends Controller
         try {
             $payment_types = PaymentType::all();
             $data = array('payment_types' => $payment_types);
-            return response()->json([
-                'status' => true,
-                'data' => $data,
+            return collect([
+                "status"=>true,
+                "payment_types"=>(json_decode(json_encode($data), true))["payment_types"],
             ]);
         } catch (\Throwable $th) {
             throw $th;

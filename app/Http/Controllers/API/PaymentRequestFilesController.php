@@ -1,17 +1,20 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\PaymentRequestFile;
 use Illuminate\Http\Request;
 
-class PaymentRequestFilesController extends Controller{
+class PaymentRequestFilesController extends Controller
+{
 
     public function index()
     {
         return response()->json(
             [
-                'files_list' =>PaymentRequestFile::all()
+                "status" => true,
+                'files_list' => PaymentRequestFile::all()
             ]
         );
     }

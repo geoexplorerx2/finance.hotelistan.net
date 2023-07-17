@@ -58,9 +58,9 @@ class CompaniesController extends Controller
             $payment_types = PaymentType::all();
             $companies = Companies::all();
             $data = array('companies' => $companies, 'payment_types' => $payment_types);
-            return response()->json([
-                "status" => true,
-                "data" => $data,
+            return collect([
+                "status"=>true,
+                "companies"=>(json_decode(json_encode($data), true))["companies"],
             ]);
         } catch (\Throwable $th) {
             throw $th;
