@@ -90,14 +90,16 @@ class PaymentRequestController extends Controller
             $item['paid_company_name'] = Companies::find((json_decode(json_encode($item), true))["paid_company_id"])->name;
             $item['payment_type_name'] = PaymentType::find((json_decode(json_encode($item), true))["payment_type_id"])->name;
             $item['user_name'] = User::find((json_decode(json_encode($item), true))["user_id"])->name;
-            $item['answered_user_name'] = User::find((json_decode(json_encode($item), true))["user_id"])->name;
+            $item['answered_user_name'] = User::find((json_decode(json_encode($item), true))["answered_user_id"]) != null ? User::find((json_decode(json_encode($item), true))["answered_user_id"])->name : '';
             return $item;
         });
-
-        return response()->json([
+        // return (json_decode(json_encode($result), true))["current_page"];
+        $data = collect([
+            "current_page" => (json_decode(json_encode($result), true))["current_page"],
             "status" => true,
-            "data" => $result,
+            'data' => (json_decode(json_encode($result), true))["data"]
         ]);
+        return $data;
     }
 
     private function setRequestValues(PaymentRequest $paymentRequest, Request $request)
