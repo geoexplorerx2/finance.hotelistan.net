@@ -58,15 +58,20 @@ class CompaniesController extends Controller
             $payment_types = PaymentType::all();
             $companies = Companies::all();
             $data = array('companies' => $companies, 'payment_types' => $payment_types);
+            $companies->map(function ($item) {
+                $id = PaymentType::find(intval($item->payment_type_id));
+                $item->payment_type_name = $id->name ?? null;
+                return $item;
+            });
             return collect([
-                "status"=>true,
-                "companies"=>(json_decode(json_encode($data), true))["companies"],
+                "status" => true,
+                "companies" => (json_decode(json_encode($data), true))["companies"],
             ]);
         } catch (\Throwable $th) {
             throw $th;
         }
     }
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
         try {
             $temp['name'] = $request->input('name');
