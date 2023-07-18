@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Companies;
 use App\Models\PaymentType;
+use App\Models\User;
 
 
 class PaymentTypesApiController extends Controller
@@ -16,10 +17,15 @@ class PaymentTypesApiController extends Controller
     {
         try {
             $payment_types = PaymentType::all();
+            $payment_types->map(function ($item) {
+                $user = User::find(intval($item->user_id));
+                $item->user_name = $user->name ?? null;
+                return $item;
+            });
             $data = array('payment_types' => $payment_types);
             return collect([
-                "status"=>true,
-                "payment_types"=>(json_decode(json_encode($data), true))["payment_types"],
+                "status" => true,
+                "payment_types" => (json_decode(json_encode($data), true))["payment_types"],
             ]);
         } catch (\Throwable $th) {
             throw $th;

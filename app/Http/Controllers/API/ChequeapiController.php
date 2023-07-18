@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Models\Cheques;
 use App\Models\Companies;
 use App\Models\ChequeStatus;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -18,6 +19,13 @@ class ChequeApiController extends Controller
             $cheques = Cheques::all();
             $companies = Companies::all();
             $chequestatuses = ChequeStatus::all();
+            $cheques->map(function ($item) {
+                $Company = Companies::find(intval($item->company_id));
+                $User = User::find(intval($item->user_id));
+                $item->company_name = $Company->name ?? null;
+                $item->user_name = $User->name ?? null;
+                return $item;
+            });
             $data = array('cheques' => $cheques, 'companies' => $companies, 'chequestatuses' => $chequestatuses);
             return response()->json([
                 'status' => true,
