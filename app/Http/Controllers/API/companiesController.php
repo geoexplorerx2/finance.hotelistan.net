@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Companies;
 use App\Models\PaymentType;
+use App\Models\User;
 
 class CompaniesController extends Controller
 {
@@ -60,7 +61,9 @@ class CompaniesController extends Controller
             $data = array('companies' => $companies, 'payment_types' => $payment_types);
             $companies->map(function ($item) {
                 $id = PaymentType::find(intval($item->payment_type_id));
+                $user = User::find(intval($item->user_id));
                 $item->payment_type_name = $id->name ?? null;
+                $item->user_name = $user->name ?? null;
                 return $item;
             });
             return collect([
