@@ -6,6 +6,7 @@ use App\Models\PaymentRequestCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 class PaymentRequestCategoryApiController extends Controller
 {
@@ -13,10 +14,14 @@ class PaymentRequestCategoryApiController extends Controller
     {
         try {
             $payment_request_categories = PaymentRequestCategory::all();
-            $data = array('payment_request_categories' => $payment_request_categories);
-            return response()->json([
-                'status' => true,
-                'data' => $data,
+            $payment_request_categories->map(function ($item) {
+                $user = User::find(intval($item->user_id));
+                $item->user_name = $user->name ?? null;
+                return $item;
+            });
+            return collect([
+                "status" => true,
+                "payment_request_categories"=>$payment_request_categories,
             ]);
         } catch (\Throwable $th) {
             throw $th;
