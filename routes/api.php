@@ -11,6 +11,7 @@ use App\Http\Controllers\API\ChequeApiController;
 use App\Http\Controllers\API\CompanyTypesApiController;
 use App\Http\Controllers\API\CreditCardApiController;
 use App\Http\Controllers\API\CurrencyController;
+use App\Http\Controllers\API\PaymentRequestStatusController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -87,6 +88,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::POST('/payment-request/store', 'App\Http\Controllers\API\PaymentRequestController@store');
     Route::PUT('/payment-request/update/{id}', 'App\Http\Controllers\API\PaymentRequestController@update');
     Route::GET('/payment-request/delete/{id}', 'App\Http\Controllers\API\PaymentRequestController@destroy');
+
+    // Payment Request Status
+    Route::get('/payment_request_status/show',[PaymentRequestStatusController::class,'show']);
 
     // Payment Request Files
     Route::GET('/payment-request/files/show', 'App\Http\Controllers\API\PaymentRequestFilesController@index');
