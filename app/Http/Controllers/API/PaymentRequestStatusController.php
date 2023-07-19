@@ -11,10 +11,14 @@ class PaymentRequestStatusController extends Controller
 {
     public function show()
     {
-        return PaymentRequestStatus::all()->map(function ($item) {
-            $item->user_name = User::find($item->user_id)->name ?? null;
-            return $item;
-        });
+
+        return collect([
+            "status" => true,
+            "payment_request_status" => PaymentRequestStatus::all()->map(function ($item) {
+                $item->user_name = User::find($item->user_id)->name ?? null;
+                return $item;
+            }),
+        ]);
     }
     public function store(Request $request)
     {
