@@ -30,8 +30,10 @@ class ChequeApiController extends Controller
             $cheques->map(function ($item) {
                 $Company = Companies::find(intval($item->company_id));
                 $User = User::find(intval($item->user_id));
+                $cheque_status = ChequeStatus::find($item->cheques_statuses_id);
                 $item->company_name = $Company->name ?? null;
                 $item->user_name = $User->name ?? null;
+                $item->cheques_statuses_name = $cheque_status->name ?? null;
                 return $item;
             });
             $data = array('cheques' => $cheques, 'companies' => $companies, 'chequestatuses' => $chequestatuses);
@@ -92,8 +94,10 @@ class ChequeApiController extends Controller
             $cheque->map(function ($item) {
                 $Company = Companies::find(intval($item->company_id));
                 $User = User::find(intval($item->user_id));
+                $cheque_status = ChequeStatus::find($item->cheques_statuses_id);
                 $item->company_name = $Company->name ?? null;
                 $item->user_name = $User->name ?? null;
+                $item->cheques_statuses_name = $cheque_status->name ?? null;
                 return $item;
             });
             return response()->json([
