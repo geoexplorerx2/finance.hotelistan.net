@@ -5,38 +5,62 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PaymentRequestStatus;
+use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 
 class PaymentRequestStatusController extends Controller
 {
     public function show()
     {
-        return PaymentRequestStatus::all()->map(function ($item) {
-            $item->user_name = User::find($item->user_id)->name ?? null;
-            return $item;
-        });
+
+        return collect([
+            "status" => true,
+            "payment_request_status" => PaymentRequestStatus::all()->map(function ($item) {
+                $item->user_name = User::find($item->user_id)->name ?? null;
+                return $item;
+            }),
+        ]);
     }
     public function store(Request $request)
     {
-        try {
-            $user = auth()->user();
-            $newData = new PaymentRequestStatus();
-            $newData->name = $request->input('status_name');
-            $newData->color = $request->input('status_color');
-            $newData->note = $request->input('note');
-            $newData->user_id = $user->id;
+        $response = null;
+        $rules = [
+            'status_name' => 'required|string|max:255',
+            'status_color' => 'required|string|max:255',
+            'note' => 'required|string|max:255',
+        ];
+        $data = [
+            'status_name' => $request->get('status_name'),
+            'status_color' => $request->get('status_color'),
+            'note' => $request->get('note'),
+        ];
 
-            if ($newData->save()) {
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Ödeme Talebi Durumu Başarıyla Eklendi!'
-                ]);
-            } else {
-                return response(false, 500);
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            $response =  $validator->errors();
+        } else {
+            try {
+                $user = auth()->user();
+                $newData = new PaymentRequestStatus();
+                $newData->name = $request->input('status_name');
+                $newData->color = $request->input('status_color');
+                $newData->note = $request->input('note');
+                $newData->user_id = $user->id;
+
+                if ($newData->save()) {
+                    $response =  response()->json([
+                        'status' => true,
+                        'message' => 'Ödeme Talebi Durumu Başarıyla Eklendi!'
+                    ]);
+                } else {
+                    $response = response(false, 500);
+                }
+            } catch (\Throwable $th) {
+                throw $th;
             }
-        } catch (\Throwable $th) {
-            throw $th;
         }
+        return $response;
     }
     public function update(Request $request, $id)
     {
