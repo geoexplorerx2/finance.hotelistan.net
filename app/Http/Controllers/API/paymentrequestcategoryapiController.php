@@ -21,7 +21,7 @@ class PaymentRequestCategoryApiController extends Controller
             });
             return collect([
                 "status" => true,
-                "payment_request_categories"=>$payment_request_categories,
+                "payment_request_categories" => $payment_request_categories,
             ]);
         } catch (\Throwable $th) {
             throw $th;
@@ -58,7 +58,12 @@ class PaymentRequestCategoryApiController extends Controller
     public function edit($id)
     {
         try {
-            $payment_request_categories = PaymentRequestCategory::where('id', '=', $id)->first();
+            $payment_request_categories = PaymentRequestCategory::where('id', '=', $id)->get();
+            $payment_request_categories->map(function ($item) {
+                $user = User::find(intval($item->user_id));
+                $item->user_name = $user->name ?? null;
+                return $item;
+            });
             return response()->json([
                 'status' => true,
                 'data' => $payment_request_categories,
