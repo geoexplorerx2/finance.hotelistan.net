@@ -60,4 +60,16 @@ class PaymentRequestStatusController extends Controller
             throw $th;
         }
     }
+    public function destroy($id)
+    {
+        try {
+            PaymentRequestStatus::find($id)->delete();
+            return response()->json([
+                "status" => true,
+                'message' => 'Ödeme Talebi Durumu Başarıyla Silindi!'
+            ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }
