@@ -91,7 +91,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // Payment Request Status
     Route::get('/payment_request_status/show', [PaymentRequestStatusController::class, 'show']);
-    Route::POST('payment_request_status/store', [PaymentRequestStatusController::class, 'store']);
+    Route::POST('/payment_request_status/store', [PaymentRequestStatusController::class, 'store']);
+    Route::POST('/payment_request_status/update/{id}', [PaymentRequestStatusController::class, 'update']);
 
     // Payment Request Files
     Route::GET('/payment-request/files/show', 'App\Http\Controllers\API\PaymentRequestFilesController@index');
