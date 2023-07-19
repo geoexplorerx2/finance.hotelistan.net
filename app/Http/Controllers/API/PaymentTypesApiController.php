@@ -60,8 +60,12 @@ class PaymentTypesApiController extends Controller
     public function edit($id)
     {
         try {
-            $payment_type = PaymentType::where('id', '=', $id)->first();
-
+            $payment_type = PaymentType::where('id', '=', $id)->get();
+            $payment_type->map(function ($item) {
+                $user = User::find(intval($item->user_id));
+                $item->user_name = $user->name ?? null;
+                return $item;
+            });
             return response()->json([
                 'status' => true,
                 'data' => $payment_type,

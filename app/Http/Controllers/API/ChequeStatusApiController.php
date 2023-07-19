@@ -58,7 +58,12 @@ class ChequeStatusApiController extends Controller
     public function edit($id)
     {
         try {
-            $cheque_statuses = ChequeStatus::where('id', '=', $id)->first();
+            $cheque_statuses = ChequeStatus::where('id', '=', $id)->get();
+            $cheque_statuses->map(function ($item) {
+                $user = User::find(intval($item->user_id));
+                $item->user_name = $user->name ?? null;
+                return $item;
+            });
             return response()->json([
                 'status' => true,
                 'data' => $cheque_statuses,
