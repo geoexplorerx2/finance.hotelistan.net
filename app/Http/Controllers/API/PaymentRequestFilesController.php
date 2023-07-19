@@ -5,16 +5,23 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\PaymentRequestFile;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class PaymentRequestFilesController extends Controller
 {
 
     public function index()
     {
+        $User = PaymentRequestFile::all();
+        $User->map(function ($item) {
+            $User = User::find(intval($item->user_id));
+            $item->user_name = $User->name ?? null;
+            return $item;
+        });
         return response()->json(
             [
                 "status" => true,
-                'files_list' => PaymentRequestFile::all()
+                'files_list' => $User,
             ]
         );
     }

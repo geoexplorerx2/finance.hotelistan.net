@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Companies;
 use App\Models\PaymentType;
+use App\Models\User;
 
 class CompaniesController extends Controller
 {
@@ -58,15 +59,22 @@ class CompaniesController extends Controller
             $payment_types = PaymentType::all();
             $companies = Companies::all();
             $data = array('companies' => $companies, 'payment_types' => $payment_types);
+            $companies->map(function ($item) {
+                $id = PaymentType::find(intval($item->payment_type_id));
+                $user = User::find(intval($item->user_id));
+                $item->payment_type_name = $id->name ?? null;
+                $item->user_name = $user->name ?? null;
+                return $item;
+            });
             return collect([
-                "status"=>true,
-                "companies"=>(json_decode(json_encode($data), true))["companies"],
+                "status" => true,
+                "companies" => (json_decode(json_encode($data), true))["companies"],
             ]);
         } catch (\Throwable $th) {
             throw $th;
         }
     }
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
         try {
             $temp['name'] = $request->input('name');

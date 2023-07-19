@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\ChequeStatus;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class ChequeStatusApiController extends Controller
 {
@@ -12,10 +13,15 @@ class ChequeStatusApiController extends Controller
     {
         try {
             $cheque_statuses = ChequeStatus::all();
+            $cheque_statuses->map(function ($item) {
+                $user = User::find(intval($item->user_id));
+                $item->user_name = $user->name ?? null;
+                return $item;
+            });
             $data = array('cheque_statuses' => $cheque_statuses);
             return collect([
-                "status"=>true,
-                "cheque_statuses"=>(json_decode(json_encode($data), true))["cheque_statuses"],
+                "status" => true,
+                "cheque_statuses" => (json_decode(json_encode($data), true))["cheque_statuses"],
             ]);
         } catch (\Throwable $th) {
             throw $th;
