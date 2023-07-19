@@ -139,7 +139,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::GET('definitions/paymentrequeststatus', 'PaymentRequestStatusController@index')->middleware(['middleware' => 'permission:ödeme talebi durumunu göster'])->name('paymentrequeststatus.index');
     Route::POST('definitions/paymentrequeststatus/store', 'PaymentRequestStatusController@store')->middleware(['middleware' => 'permission:ödeme talebi durumu oluştur'])->name('paymentrequeststatus.store');
     Route::GET('definitions/paymentrequeststatus/edit/{id}', 'PaymentRequestStatusController@edit')->middleware(['middleware' => 'permission:ödeme talebi durumunu düzenle'])->name('paymentrequeststatus.edit');
-    Route::POST('definitions/paymentrequeststatus/update/{id}', 'p@update')->middleware(['middleware' => 'permission:ödeme talebi durumunu düzenle'])->name('paymentrequeststatus.update');
+    Route::POST('definitions/paymentrequeststatus/update/{id}', 'PaymentRequestStatusController@update')->middleware(['middleware' => 'permission:ödeme talebi durumunu düzenle'])->name('paymentrequeststatus.update');
     Route::GET('definitions/paymentrequeststatus/destroy/{id}', 'PaymentRequestStatusController@destroy')->middleware(['middleware' => 'permission:ödeme isteği durumunu sil'])->name('paymentrequeststatus.destroy');
     //Payment Request Status
 
