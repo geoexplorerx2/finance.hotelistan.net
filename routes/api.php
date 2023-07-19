@@ -90,7 +90,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::GET('/payment-request/delete/{id}', 'App\Http\Controllers\API\PaymentRequestController@destroy');
 
     // Payment Request Status
-    Route::get('/payment_request_status/show',[PaymentRequestStatusController::class,'show']);
+    Route::get('/payment_request_status/show', [PaymentRequestStatusController::class, 'show']);
+    Route::POST('payment_request_status/store', [PaymentRequestStatusController::class, 'store']);
 
     // Payment Request Files
     Route::GET('/payment-request/files/show', 'App\Http\Controllers\API\PaymentRequestFilesController@index');

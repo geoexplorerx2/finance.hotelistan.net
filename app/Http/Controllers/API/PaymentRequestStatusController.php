@@ -16,4 +16,26 @@ class PaymentRequestStatusController extends Controller
             return $item;
         });
     }
+    public function store(Request $request)
+    {
+        try {
+            $user = auth()->user();
+            $newData = new PaymentRequestStatus();
+            $newData->name = $request->input('status_name');
+            $newData->color = $request->input('status_color');
+            $newData->note = $request->input('note');
+            $newData->user_id = $user->id;
+
+            if ($newData->save()) {
+                return response()->json([
+                    'status' => true,
+                    'message'=>'Ödeme Talebi Durumu Başarıyla Eklendi!'
+                ]);
+            } else {
+                return response(false, 500);
+            }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }
