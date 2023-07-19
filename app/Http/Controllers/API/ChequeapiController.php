@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\PaymentType;
 
 class ChequeApiController extends Controller
 {
@@ -19,6 +20,13 @@ class ChequeApiController extends Controller
             $cheques = Cheques::all();
             $companies = Companies::all();
             $chequestatuses = ChequeStatus::all();
+            $companies->map(function ($item) {
+                $id = PaymentType::find(intval($item->payment_type_id));
+                $user = User::find(intval($item->user_id));
+                $item->payment_type_name = $id->name ?? null;
+                $item->user_name = $user->name ?? null;
+                return $item;
+            });
             $cheques->map(function ($item) {
                 $Company = Companies::find(intval($item->company_id));
                 $User = User::find(intval($item->user_id));
@@ -71,9 +79,23 @@ class ChequeApiController extends Controller
     public function edit($id)
     {
         try {
-            $cheque = Cheques::where('id', '=', $id)->first();
+            $cheque = Cheques::where('id', '=', $id)->get();
             $companies = Companies::all();
             $chequestatuses = ChequeStatus::all();
+            $companies->map(function ($item) {
+                $id = PaymentType::find(intval($item->payment_type_id));
+                $user = User::find(intval($item->user_id));
+                $item->payment_type_name = $id->name ?? null;
+                $item->user_name = $user->name ?? null;
+                return $item;
+            });
+            $cheque->map(function ($item) {
+                $Company = Companies::find(intval($item->company_id));
+                $User = User::find(intval($item->user_id));
+                $item->company_name = $Company->name ?? null;
+                $item->user_name = $User->name ?? null;
+                return $item;
+            });
             return response()->json([
                 'status' => true, 'cheque' => $cheque, 'companies' => $companies, 'chequestatuses' => $chequestatuses
             ]);
