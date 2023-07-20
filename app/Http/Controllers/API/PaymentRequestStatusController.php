@@ -93,14 +93,21 @@ class PaymentRequestStatusController extends Controller
     }
     public function destroy($id)
     {
-        try {
-            PaymentRequestStatus::find($id)->delete();
+        if (PaymentRequestStatus::where('id', $id)->count() == 0) {
             return response()->json([
-                "status" => true,
-                'message' => 'Ödeme Talebi Durumu Başarıyla Silindi!'
+                "status" => false,
+                "message" => "bu kayıt mevcut değil"
             ]);
-        } catch (\Throwable $th) {
-            throw $th;
+        } else {
+            try {
+                PaymentRequestStatus::find($id)->delete();
+                return response()->json([
+                    "status" => true,
+                    'message' => 'Ödeme Talebi Durumu Başarıyla Silindi!'
+                ]);
+            } catch (\Throwable $th) {
+                throw $th;
+            }
         }
     }
 }
