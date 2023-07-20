@@ -96,7 +96,7 @@ class PaymentRequestStatusController extends Controller
         if (PaymentRequestStatus::where('id', $id)->count() == 0) {
             return response()->json([
                 "status" => false,
-                "message" => "bu kayıt mevcut değil"
+                "message" => "Bu kayıt mevcut değildir"
             ]);
         } else {
             try {
