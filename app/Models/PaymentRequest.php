@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,6 +10,12 @@ class PaymentRequest extends Model
     use SoftDeletes;
 
     protected $table = 'payment_requests';
+
+    protected $fillable = [
+        'payment_request_status_id',
+        'answer_note',
+        'answered_user_id'
+    ];
 
     public function paidCompanies()
     {

@@ -211,13 +211,13 @@ class PaymentRequestController extends Controller
         }
         /** @var PaymentRequest */
         $paymentRequest = PaymentRequest::findOrFail($id);
-        $paymentRequest->payment_request_status_id = $request->get("payment_request_status_id");
-        $paymentRequest->answer_note = $request->get("answer_note");
-        $paymentRequest->answered_user_id = Auth::user()->id;
-        $paymentRequest->save();
-        return response()->json([
-            "status" => true,
-            "message" => "Ödeme Talebi başarıyla cevaplandı."
-        ]);;
+        $user = Auth::user();
+        $update = $request->only(['payment_request_status_id', 'answer_note']);
+        $update['answered_user_id'] = $user->id;
+        if ($paymentRequest->update($update)) {
+            return response(true, 200);
+        } else {
+            return response(false, 500);
+        }
     }
 }
