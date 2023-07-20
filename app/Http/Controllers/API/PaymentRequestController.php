@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\PaymentRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
@@ -14,9 +13,6 @@ use App\Models\PaymentRequestCategory;
 use App\Models\Companies;
 use App\Models\PaymentType;
 use App\Models\User;
-use Illuminate\Support\Carbon;
-use Illuminate\Validation\Rules\Unique;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class PaymentRequestController extends Controller
 {
@@ -199,5 +195,29 @@ class PaymentRequestController extends Controller
             "status" => true,
             "message" => "Ödeme Talebi başarıyla silindi."
         ]);
+    }
+
+    public function answer(Request $request, $id)
+    {
+        $validate = Validator::make(
+            $request->all(),
+            [
+                'payment_request_status_id' => 'required|exists:payment_requests_statuses,id',
+                'answer_note' => 'required'
+            ]
+        );
+        if ($validate->fails()) {
+            return $validate->errors();
+        }
+        /** @var PaymentRequest */
+        $paymentRequest = PaymentRequest::findOrFail($id);
+        $paymentRequest->payment_request_status_id = $request->get("payment_request_status_id");
+        $paymentRequest->answer_note = $request->get("answer_note");
+        $paymentRequest->answered_user_id = Auth::user()->id;
+        $paymentRequest->save();
+        return response()->json([
+            "status" => true,
+            "message" => "Ödeme Talebi başarıyla cevaplandı."
+        ]);;
     }
 }
