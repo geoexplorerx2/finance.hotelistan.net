@@ -143,17 +143,37 @@ class PaymentRequestController extends Controller
                     'errors' =>  $valid
                 ], 401);
             }
-            if ($newData->save()) {
-                return response()->json([
-                    "status" => true,
-                    "request_id" => $newData->id,
-                    "message" => "Ödeme Talebi başarıyla oluşturuldu."
-                ]);
+            if (
+                PaymentRequest::where('expiry_date', $request->input('expiryDate'))
+                ->where('payment_amount', $request->input('paymentAmount'))
+                ->where('payment_amount_currency', $request->input('paymentCurrency'))
+                ->where('payment_request_status_id', "1")
+                ->where('payment_request_category_id', $request->input('categoryId'))
+                ->where('pay_company_id', $request->input('payCompanyId'))
+                ->where('paid_company_id', $request->input('paidCompanyId'))
+                ->where('document_no', $request->input('documentNo'))
+                ->where('document_date', $request->input('documentDate'))
+                ->where('payment_type_id', $request->input('paymentTypeId'))
+                ->where('invoice_date', $request->input('invoiceDate'))
+                ->count() == 0
+            ) {
+                if ($newData->save()) {
+                    return response()->json([
+                        "status" => true,
+                        "request_id" => $newData->id,
+                        "message" => "Ödeme Talebi başarıyla oluşturuldu."
+                    ]);
+                } else {
+                    return response()->json([
+                        "status" => false,
+                        "message" => "Ödeme Talebi oluşturulurken bilinmeyen bir hata meydana geldi."
+                    ], 401);
+                }
             } else {
                 return response()->json([
                     "status" => false,
-                    "message" => "Ödeme Talebi oluşturulurken bilinmeyen bir hata meydana geldi."
-                ], 401);
+                    "message" => "Bu kayıt mevcut, lütfen başka data girin"
+                ]);
             }
         } catch (\Throwable $th) {
             throw $th;
