@@ -63,7 +63,7 @@ class PaymentRequestStatusController extends Controller
             } else {
                 $response =  response()->json([
                     'status' => false,
-                    'message' => 'Bu kayıt mevcut , lütfen başka bir kayıt seçiniz'
+                    'message' => 'Bu kayıt mevcut , lütfen başka bir kayıt giriniz'
                 ]);
             }
         }
@@ -93,14 +93,21 @@ class PaymentRequestStatusController extends Controller
     }
     public function destroy($id)
     {
-        try {
-            PaymentRequestStatus::find($id)->delete();
+        if (PaymentRequestStatus::where('id', $id)->count() == 0) {
             return response()->json([
-                "status" => true,
-                'message' => 'Ödeme Talebi Durumu Başarıyla Silindi!'
+                "status" => false,
+                "message" => "Bu kayıt mevcut değildir"
             ]);
-        } catch (\Throwable $th) {
-            throw $th;
+        } else {
+            try {
+                PaymentRequestStatus::find($id)->delete();
+                return response()->json([
+                    "status" => true,
+                    'message' => 'Ödeme Talebi Durumu Başarıyla Silindi!'
+                ]);
+            } catch (\Throwable $th) {
+                throw $th;
+            }
         }
     }
 }
