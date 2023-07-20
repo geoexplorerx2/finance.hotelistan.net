@@ -40,24 +40,31 @@ class PaymentRequestStatusController extends Controller
         if ($validator->fails()) {
             $response =  $validator->errors();
         } else {
-            try {
-                $user = auth()->user();
-                $newData = new PaymentRequestStatus();
-                $newData->name = $request->input('status_name');
-                $newData->color = $request->input('status_color');
-                $newData->note = $request->input('note');
-                $newData->user_id = $user->id;
+            if (PaymentRequestStatus::where('name', $request->get('status_name'))->where('color', $request->get('status_color'))->count() == 0) {
+                try {
+                    $user = auth()->user();
+                    $newData = new PaymentRequestStatus();
+                    $newData->name = $request->input('status_name');
+                    $newData->color = $request->input('status_color');
+                    $newData->note = $request->input('note');
+                    $newData->user_id = $user->id;
 
-                if ($newData->save()) {
-                    $response =  response()->json([
-                        'status' => true,
-                        'message' => 'Ödeme Talebi Durumu Başarıyla Eklendi!'
-                    ]);
-                } else {
-                    $response = response(false, 500);
+                    if ($newData->save()) {
+                        $response =  response()->json([
+                            'status' => true,
+                            'message' => 'Ödeme Talebi Durumu Başarıyla Eklendi!'
+                        ]);
+                    } else {
+                        $response = response(false, 500);
+                    }
+                } catch (\Throwable $th) {
+                    throw $th;
                 }
-            } catch (\Throwable $th) {
-                throw $th;
+            } else {
+                $response =  response()->json([
+                    'status' => false,
+                    'message' => 'Bu kayıt mevcut , lütfen başka bir kayıt seçiniz'
+                ]);
             }
         }
         return $response;
