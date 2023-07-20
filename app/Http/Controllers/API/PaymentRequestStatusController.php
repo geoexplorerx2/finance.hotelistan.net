@@ -63,7 +63,7 @@ class PaymentRequestStatusController extends Controller
             } else {
                 $response =  response()->json([
                     'status' => false,
-                    'message' => 'Bu kayıt mevcut , lütfen başka bir kayıt seçiniz'
+                    'message' => 'Bu kayıt mevcut , lütfen başka bir kayıt giriniz'
                 ]);
             }
         }
