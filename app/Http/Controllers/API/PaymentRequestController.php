@@ -215,9 +215,15 @@ class PaymentRequestController extends Controller
         $update = $request->only(['payment_request_status_id', 'answer_note']);
         $update['answered_user_id'] = $user->id;
         if ($paymentRequest->update($update)) {
-            return response(true, 200);
+            return response()->json([
+                "status" => true,
+                "message" => "Ödeme Talebi başarıyla cevaplandı."
+            ]);
         } else {
-            return response(false, 500);
+            return response()->json([
+                "status" => true,
+                "message" => "Ödeme Talebi başarıyla cevaplanırken bir hata meydana geldi."
+            ], 500);
         }
     }
 }
