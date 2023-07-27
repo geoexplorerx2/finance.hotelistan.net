@@ -248,4 +248,21 @@ class PaymentRequestController extends Controller
             ], 500);
         }
     }
+    public function edit(Request $request, $id)
+    {
+        if (PaymentRequest::where('id', $id)->count() == 0) {
+            return response()->json([
+                "status" => false,
+                "message" => "Not Found"
+            ]);
+        } else {
+            $data = PaymentRequest::find($id);
+            return collect([
+                "status" => true,
+                "id" => $id,
+                "data" => $data,
+
+            ]);
+        }
+    }
 }
