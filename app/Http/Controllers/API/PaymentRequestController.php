@@ -254,10 +254,20 @@ class PaymentRequestController extends Controller
                 "message" => "Not Found"
             ]);
         } else {
-            $data = PaymentRequest::find($id);
+            // find me
+            $data = PaymentRequest::where('id', $id)->get();
+            $data->map(function ($item) {
+                $item["payment_request_status_name"] = (PaymentRequestStatus::find($item->payment_request_status_id))->name ?? null;
+                $item["payment_request_category_name"] = (PaymentRequestCategory::find($item->payment_request_category_id))->name ?? null;
+                $item['paid_company_name'] = Companies::find((json_decode(json_encode($item), true))["paid_company_id"])->name ?? null;
+                $item['pay_company_name'] = Companies::find((json_decode(json_encode($item), true))["pay_company_id"])->name ?? null;
+                $item['payment_type_name'] = PaymentType::find((json_decode(json_encode($item), true))["payment_type_id"])->name ?? null;
+                $item['user_name'] = User::find((json_decode(json_encode($item), true))["user_id"])->name ?? null;
+                $item['answered_user_name'] = User::find((json_decode(json_encode($item), true))["answered_user_id"]) != null ? User::find((json_decode(json_encode($item), true))["answered_user_id"])->name : '';
+                return $item;
+            });
             return collect([
                 "status" => true,
-                "id" => $id,
                 "data" => $data,
 
             ]);
