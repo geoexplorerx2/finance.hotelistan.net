@@ -88,6 +88,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::POST('/payment-request/store', 'App\Http\Controllers\API\PaymentRequestController@store');
     Route::PUT('/payment-request/update/{id}', 'App\Http\Controllers\API\PaymentRequestController@update');
     Route::GET('/payment-request/delete/{id}', 'App\Http\Controllers\API\PaymentRequestController@destroy');
+    Route::POST('/payment-request/answer/{id}', 'App\Http\Controllers\API\PaymentRequestController@answer');
 
     // Payment Request Status
     Route::get('/payment_request_status/show', [PaymentRequestStatusController::class, 'show']);
