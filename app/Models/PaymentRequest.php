@@ -14,7 +14,8 @@ class PaymentRequest extends Model
     protected $fillable = [
         'payment_request_status_id',
         'answer_note',
-        'answered_user_id'
+        'answered_user_id',
+        'post_time'
     ];
 
     public function paidCompanies()

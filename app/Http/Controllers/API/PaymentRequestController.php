@@ -13,6 +13,7 @@ use App\Models\PaymentRequestCategory;
 use App\Models\Companies;
 use App\Models\PaymentType;
 use App\Models\User;
+use Carbon\Carbon;
 
 class PaymentRequestController extends Controller
 {
@@ -214,6 +215,7 @@ class PaymentRequestController extends Controller
         $user = Auth::user();
         $update = $request->only(['payment_request_status_id', 'answer_note']);
         $update['answered_user_id'] = $user->id;
+        $update['post_time'] = Carbon::now()->toDateTimeString();
         if ($paymentRequest->update($update)) {
             return response()->json([
                 "status" => true,
