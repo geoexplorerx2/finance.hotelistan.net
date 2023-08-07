@@ -15,18 +15,22 @@ class CurrencyController extends Controller
             [
                 'name' => 'Euro',
                 'value' => 'EUR',
+                'Symbol' => '€',
             ],
             [
                 'name' => 'Dollar',
                 'value' => 'USD',
+                'Symbol' => '$',
             ],
             [
                 'name' => 'Pound',
                 'value' => 'GBP',
+                'Symbol' => '£',
             ],
             [
                 'name' => 'Lira',
                 'value' => 'TRY',
+                'Symbol' => '₺',
             ],
         ]]);
     }
