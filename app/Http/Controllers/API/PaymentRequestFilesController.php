@@ -10,14 +10,16 @@ use App\Models\User;
 class PaymentRequestFilesController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         $User = PaymentRequestFile::all();
         $User->map(function ($item) {
             $User = User::find(intval($item->user_id));
             $item->user_name = $User->name ?? null;
+            $item->path = 'https//'.$_SERVER['HTTP_HOST'].'/files/'.$item->path ?? null;
             return $item;
         });
+        
         return response()->json(
             [
                 "status" => true,
