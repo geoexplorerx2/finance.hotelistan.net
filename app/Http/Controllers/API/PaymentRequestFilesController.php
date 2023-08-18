@@ -16,7 +16,7 @@ class PaymentRequestFilesController extends Controller
         $User->map(function ($item) {
             $User = User::find(intval($item->user_id));
             $item->user_name = $User->name ?? null;
-            $item->path = 'https//'.$_SERVER['HTTP_HOST'].'/files/'.$item->path ?? null;
+            $item->path = 'https://'.$_SERVER['HTTP_HOST'].'/files/'.$item->path ?? null;
             return $item;
         });
         
