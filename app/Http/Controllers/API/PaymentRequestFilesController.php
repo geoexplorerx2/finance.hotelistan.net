@@ -28,6 +28,23 @@ class PaymentRequestFilesController extends Controller
         );
     }
 
+    public function detail($id){
+        $User = PaymentRequestFile::where('payment_request_id','=',$id)->get();
+        $User->map(function ($item) {
+            $User = User::find(intval($item->user_id));
+            $item->user_name = $User->name ?? null;
+            $item->path = 'https://'.$_SERVER['HTTP_HOST'].'/files/'.$item->path ?? null;
+            return $item;
+        });
+        
+        return response()->json(
+            [
+                "status" => true,
+                'file_detail' => $User,
+            ]
+        );
+    }
+
     public function store(Request $request)
     {
         /** @var \Illuminate\Http\UploadedFile */
