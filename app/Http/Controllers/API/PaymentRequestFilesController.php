@@ -19,7 +19,7 @@ class PaymentRequestFilesController extends Controller
             $item->path = 'https://'.$_SERVER['HTTP_HOST'].'/files/'.$item->path ?? null;
             return $item;
         });
-        
+
         return response()->json(
             [
                 "status" => true,
@@ -36,7 +36,7 @@ class PaymentRequestFilesController extends Controller
             $item->path = 'https://'.$_SERVER['HTTP_HOST'].'/files/'.$item->path ?? null;
             return $item;
         });
-        
+
         return response()->json(
             [
                 "status" => true,
@@ -46,21 +46,34 @@ class PaymentRequestFilesController extends Controller
     }
 
     public function store(Request $request)
-    {
-        /** @var \Illuminate\Http\UploadedFile */
-        $image = $request->file('file');
-        $fileName = $image->hashName();
-        $image->move(public_path('files'), $fileName);
+{
+    $files = $request->file('files');
 
-        $imageUpload = new PaymentRequestFile();
-        $imageUpload->path = $fileName;
-        $imageUpload->payment_request_id = $request->input('paymentRequestId');
-        $imageUpload->save();
-        return response()->json([
-            "success" => true,
-            "message" => "Dosya başarıyla kaydedildi."
-        ]);
+    $successCount = 0;
+    $errorCount = 0;
+
+    foreach ($files as $file) {
+        if ($file->isValid()) {
+            $fileName = $file->hashName();
+            $file->move(public_path('files'), $fileName);
+
+            $imageUpload = new PaymentRequestFile();
+            $imageUpload->path = $fileName;
+            $imageUpload->payment_request_id = $request->input('paymentRequestId');
+            $imageUpload->save();
+
+            $successCount++;
+        } else {
+            $errorCount++;
+        }
     }
+
+    return response()->json([
+        "success" => true,
+        "message" => "Dosyalar başarıyla kaydedildi.",
+    ]);
+}
+
 
     public function destroy($id)
     {
